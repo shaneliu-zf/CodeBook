@@ -258,7 +258,7 @@ public:
     	}
     	return res.trim(),res;
     }
-	bigN operator/(const bigN &b)const{
+    bigN operator/(const bigN &b)const{
 		int norm=base/(b.back()+1);
 		bigN x=abs()*norm;
 		bigN y=b.abs()*norm;

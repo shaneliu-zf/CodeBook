@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import os
 
 text="# CodeBook by 櫛風\n"

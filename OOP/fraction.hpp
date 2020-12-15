@@ -9,7 +9,7 @@ public:
     }
     Frac operator=(Frac b){first=b.first;second=b.second;return *this;}
     friend Frac operator+(Frac a,Frac b){
-    		return Frac(a.first*b.second+b.first*a.second,a.second*b.second);
+    	return Frac(a.first*b.second+b.first*a.second,a.second*b.second);
     }
     friend Frac operator-(Frac a,Frac b){return a+(-1*b);}
     friend Frac operator*(Frac a,Frac b){ return Frac(a.first*b.first,a.second*b.second);}
@@ -26,14 +26,14 @@ public:
 	friend bool operator>=(Frac a,Frac b){return !(a<b);}
     friend std::ostream & operator<<(std::ostream &out,const Frac &x){
       	out<<x.first;
-    		if(x.second!=1)out<<"/"<<x.second;
+    	if(x.second!=1)out<<"/"<<x.second;
         return out;
     }
     friend std::istream & operator>>(std::istream &in,Frac &x){
-    		int a,b;
-    		in>>a>>b;
+    	int a,b;
+    	in>>a>>b;
         x=Frac(a,b);
-    		return in;
+		return in;
     }
     friend Frac inverse(Frac a){return Frac(a.second,a.first);}
 };

@@ -132,7 +132,7 @@ public:
 		for(int i=0;i<a.column();i++){
 			c[i].resize(a.row());
 			for(int j=0;j<a.row();j++){
-					c[i][j]=a[j][i];
+				c[i][j]=a[j][i];
 			}
 		}
 		Matrix ans(c);
@@ -149,7 +149,7 @@ public:
 		double ans=0;
 		if(a.row()==1)ans=a[0][0];
 		else for(int i=0;i<a.column();i++){
-				ans+=pow(-1,i)*a[0][i]*det(cof(a,0,i));
+			ans+=pow(-1,i)*a[0][i]*det(cof(a,0,i));
 		}
 		return ans;
 	}

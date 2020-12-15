@@ -40,13 +40,10 @@ private:
         bigN a2(begin()+k,end());
         bigN b1(b.begin(),b.begin()+k);
         bigN b2(b.begin()+k,b.end());
-
         bigN a1b1=a1.karatsuba(b1);
         bigN a2b2=a2.karatsuba(b2);
-
         for(size_t i=0;i<k;++i)a2[i]+=a1[i];
         for(size_t i=0;i<k;++i)b2[i]+=b1[i];
-
         bigN r=a2.karatsuba(b2);
         for(size_t i=0;i<a1b1.size();++i)r[i]-=a1b1[i];
         for(size_t i=0;i<a2b2.size();++i)r[i]-=a2b2[i];
@@ -83,27 +80,27 @@ private:
         return negative?-abscmp(b):abscmp(b);
     }
     bigN abs()const{
-				bigN res=*this;
-				return res.negative=0,res;
-		}
+        bigN res=*this;
+        return res.negative=0,res;
+	}
 public:
     bigN():negative(0){}
-		bigN(const_iterator a,const_iterator b):vector<long long>(a,b){}
-		bigN(std::string s){
-				if(s.empty())return;
-				if(s[0]=='-')negative=1,s=s.substr(1);
-				else negative=0;
-				for(int i=int(s.size())-1;i>=0;i-=width){
-						long long t=0;
-						for(int j=std::max(0,i-width+1);j<=i;++j)
-						t=t*10+s[j]-'0';
-						push_back(t);
-				}
-				trim();
+	bigN(const_iterator a,const_iterator b):vector<long long>(a,b){}
+	bigN(std::string s){
+        if(s.empty())return;
+        if(s[0]=='-')negative=1,s=s.substr(1);
+        else negative=0;
+        for(int i=int(s.size())-1;i>=0;i-=width){
+            long long t=0;
+            for(int j=std::max(0,i-width+1);j<=i;++j)
+                t=t*10+s[j]-'0';
+            push_back(t);
 		}
-		template<typename T>bigN(const T &x){
-    		std::stringstream ss;
-    		ss<<x;
+        trim();
+	}
+	template<typename T>bigN(const T &x){
+    	std::stringstream ss;
+    	ss<<x;
         *this=ss.str();
     }
 	bool operator<(const bigN&b)const{return cmp(b)<0;}
@@ -172,37 +169,35 @@ public:
 		}
 		q.negative=negative!=b.negative;
 		return q.trim(),q;
-	}
-	bigN operator%(const bigN &b)const{
-		return *this-(*this/b)*b;
-	}
+    }
+	bigN operator%(const bigN &b)const{return *this-(*this/b)*b;}
     bigN operator<<(const int &b)const{
         bigN res=*this;
         for(int i=0;i<b;i++)res*=2;
         return res.carry(),res.trim(),res;
-	}
+    }
     bigN operator>>(const int &b)const{
         bigN res=*this;
         for(int i=0;i<b;i++)res/=2;
         return res.carry(),res.trim(),res;
-	}
+    }
 	friend std::istream& operator>>(std::istream &ss,bigN &b){
 		std::string s;
 		return ss>>s,b=s,ss;
-	}
+    }
 	friend std::ostream& operator<<(std::ostream &ss,const bigN &b){
 		if(b.negative)ss<<'-';
 		ss<<(b.empty()?0:b.back());
 		for(int i=int(b.size())-2;i>=0;--i)
 		ss<<std::setw(width)<<std::setfill('0')<<b[i];
 		return ss;
-	}
+    }
 	template<typename T>operator T(){
 		std::stringstream ss;
 		ss<<*this;
         T res;
         return ss>>res,res;
-	}
+    }
     friend bigN abs(bigN a){return a.abs();}
     bigN operator+=(const bigN &other){*this=(*this)+(other);return *this;}
     bigN operator-=(const bigN &other){*this=(*this)-(other);return *this;}

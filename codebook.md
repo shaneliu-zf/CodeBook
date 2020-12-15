@@ -146,13 +146,10 @@ private:
         bigN a2(begin()+k,end());
         bigN b1(b.begin(),b.begin()+k);
         bigN b2(b.begin()+k,b.end());
-
         bigN a1b1=a1.karatsuba(b1);
         bigN a2b2=a2.karatsuba(b2);
-
         for(size_t i=0;i<k;++i)a2[i]+=a1[i];
         for(size_t i=0;i<k;++i)b2[i]+=b1[i];
-
         bigN r=a2.karatsuba(b2);
         for(size_t i=0;i<a1b1.size();++i)r[i]-=a1b1[i];
         for(size_t i=0;i<a2b2.size();++i)r[i]-=a2b2[i];
@@ -189,27 +186,27 @@ private:
         return negative?-abscmp(b):abscmp(b);
     }
     bigN abs()const{
-				bigN res=*this;
-				return res.negative=0,res;
-		}
+        bigN res=*this;
+        return res.negative=0,res;
+	}
 public:
     bigN():negative(0){}
-		bigN(const_iterator a,const_iterator b):vector<long long>(a,b){}
-		bigN(std::string s){
-				if(s.empty())return;
-				if(s[0]=='-')negative=1,s=s.substr(1);
-				else negative=0;
-				for(int i=int(s.size())-1;i>=0;i-=width){
-						long long t=0;
-						for(int j=std::max(0,i-width+1);j<=i;++j)
-						t=t*10+s[j]-'0';
-						push_back(t);
-				}
-				trim();
+	bigN(const_iterator a,const_iterator b):vector<long long>(a,b){}
+	bigN(std::string s){
+        if(s.empty())return;
+        if(s[0]=='-')negative=1,s=s.substr(1);
+        else negative=0;
+        for(int i=int(s.size())-1;i>=0;i-=width){
+            long long t=0;
+            for(int j=std::max(0,i-width+1);j<=i;++j)
+                t=t*10+s[j]-'0';
+            push_back(t);
 		}
-		template<typename T>bigN(const T &x){
-    		std::stringstream ss;
-    		ss<<x;
+        trim();
+	}
+	template<typename T>bigN(const T &x){
+    	std::stringstream ss;
+    	ss<<x;
         *this=ss.str();
     }
 	bool operator<(const bigN&b)const{return cmp(b)<0;}
@@ -278,37 +275,35 @@ public:
 		}
 		q.negative=negative!=b.negative;
 		return q.trim(),q;
-	}
-	bigN operator%(const bigN &b)const{
-		return *this-(*this/b)*b;
-	}
+    }
+	bigN operator%(const bigN &b)const{return *this-(*this/b)*b;}
     bigN operator<<(const int &b)const{
         bigN res=*this;
         for(int i=0;i<b;i++)res*=2;
         return res.carry(),res.trim(),res;
-	}
+    }
     bigN operator>>(const int &b)const{
         bigN res=*this;
         for(int i=0;i<b;i++)res/=2;
         return res.carry(),res.trim(),res;
-	}
+    }
 	friend std::istream& operator>>(std::istream &ss,bigN &b){
 		std::string s;
 		return ss>>s,b=s,ss;
-	}
+    }
 	friend std::ostream& operator<<(std::ostream &ss,const bigN &b){
 		if(b.negative)ss<<'-';
 		ss<<(b.empty()?0:b.back());
 		for(int i=int(b.size())-2;i>=0;--i)
 		ss<<std::setw(width)<<std::setfill('0')<<b[i];
 		return ss;
-	}
+    }
 	template<typename T>operator T(){
 		std::stringstream ss;
 		ss<<*this;
         T res;
         return ss>>res,res;
-	}
+    }
     friend bigN abs(bigN a){return a.abs();}
     bigN operator+=(const bigN &other){*this=(*this)+(other);return *this;}
     bigN operator-=(const bigN &other){*this=(*this)-(other);return *this;}
@@ -459,7 +454,7 @@ public:
 		for(int i=0;i<a.column();i++){
 			c[i].resize(a.row());
 			for(int j=0;j<a.row();j++){
-					c[i][j]=a[j][i];
+				c[i][j]=a[j][i];
 			}
 		}
 		Matrix ans(c);
@@ -476,7 +471,7 @@ public:
 		double ans=0;
 		if(a.row()==1)ans=a[0][0];
 		else for(int i=0;i<a.column();i++){
-				ans+=pow(-1,i)*a[0][i]*det(cof(a,0,i));
+			ans+=pow(-1,i)*a[0][i]*det(cof(a,0,i));
 		}
 		return ans;
 	}
@@ -527,7 +522,7 @@ public:
     }
     Frac operator=(Frac b){first=b.first;second=b.second;return *this;}
     friend Frac operator+(Frac a,Frac b){
-    		return Frac(a.first*b.second+b.first*a.second,a.second*b.second);
+    	return Frac(a.first*b.second+b.first*a.second,a.second*b.second);
     }
     friend Frac operator-(Frac a,Frac b){return a+(-1*b);}
     friend Frac operator*(Frac a,Frac b){ return Frac(a.first*b.first,a.second*b.second);}
@@ -544,14 +539,14 @@ public:
 	friend bool operator>=(Frac a,Frac b){return !(a<b);}
     friend std::ostream & operator<<(std::ostream &out,const Frac &x){
       	out<<x.first;
-    		if(x.second!=1)out<<"/"<<x.second;
+    	if(x.second!=1)out<<"/"<<x.second;
         return out;
     }
     friend std::istream & operator>>(std::istream &in,Frac &x){
-    		int a,b;
-    		in>>a>>b;
+    	int a,b;
+    	in>>a>>b;
         x=Frac(a,b);
-    		return in;
+		return in;
     }
     friend Frac inverse(Frac a){return Frac(a.second,a.first);}
 };
@@ -576,13 +571,13 @@ public class Main{
 	public static void main(String[] args){
 		Scanner keyboard=new Scanner(System.in);
 		String str;
-        int num;
+		int num;
 		while(keyboard.hasNext()){
-		    str=keyboard.next();
-            System.out.println(str);
-          	num=keyboard.nextInt();
-          	System.out.println(num);
-        }
+			str=keyboard.next();
+			System.out.println(str);
+			num=keyboard.nextInt();
+			System.out.println(num);
+		}
 	}
 }
 ```
@@ -641,7 +636,7 @@ int main(){
     return 0;
 }
 ```
-### 0-1_knapsack
+### 0-1Knapsack
 ```cpp
 #include<iostream>
 using namespace std;
@@ -661,7 +656,7 @@ int main(){
         }
     }
     cout<<dp[m]<<endl;
-	return 0;
+    return 0;
 }
 ```
 ## Math
@@ -678,11 +673,11 @@ double Newton_Raphson_Method(func f,double x=1){
 //need: gcdExtended
 num chineseRemainder(num a[],num w[],int len){
 	num d,x,y,m,n=1,ret=0;
-		for (int i=0;i<len;i++)n*=w[i];
-		for (int i=0;i<len;i++){
-				m=n/w[i];
-				d=gcdExtended(w[i],m,&x,&y);
-				ret=(ret+y*m*a[i])%n;
+		for(int i=0;i<len;i++)n*=w[i];
+		for(int i=0;i<len;i++){
+			m=n/w[i];
+			d=gcdExtended(w[i],m,&x,&y);
+			ret=(ret+y*m*a[i])%n;
 		}
 		return (n+ret%n)%n;
 }
@@ -717,16 +712,16 @@ inline num pollardRho(num n){
     if(millerRabin(n)){cout<<n<<" ";return n;}
     num p=n;
     while(p==n)p=[](int n){
-   			num c=rand()%(n-1)+1;
-    		num k=2,x=1ll*rand()%n+1,y=x;
-    		for(num i=2;;i++){
-        		x=(fastMulti(x,x,n)+c)%n;
-        		num d=gcd(x-y,n);
-        		if(d!=1 && d!=n)return d;
-        		if(y==x)return n;
-        		if(i==k)k<<=1,y=x;
-   			}
-		}(p);
+   	    num c=rand()%(n-1)+1;
+    	num k=2,x=1ll*rand()%n+1,y=x;
+    	for(num i=2;;i++){
+        	x=(fastMulti(x,x,n)+c)%n;
+    		num d=gcd(x-y,n);
+    		if(d!=1 && d!=n)return d;
+    		if(y==x)return n;
+    		if(i==k)k<<=1,y=x;
+   		}
+	}(p);
     return max(pollardRho(p),pollardRho(n/p));
 }
 ```
@@ -739,13 +734,13 @@ inline num fastMulti(num a,num b,num mod=0){
       	a=(mod)?(a<<1)%mod:a<<1;
         b>>=1;
     }
-  	return ans;
+    return ans;
 }
 ```
 ### gcd
 ```cpp
 inline num gcd(num a,num b){
-  return a<0?gcd(-a,b):(!a?1:(!b?a:gcd(b,a%b)));
+    return a<0?gcd(-a,b):(!a?1:(!b?a:gcd(b,a%b)));
 }// lcm=a*b/gcd(a,b)
 ```
 ### Miller_Rabin
@@ -786,7 +781,7 @@ num modInverse(num a,num m){
 ```cpp
 bool isSquareNumber(long long n){
   	if(n<1)return false;
-		for(long long i=1;n;i+=2)n-=i;
-		return !n;
+	for(long long i=1;n;i+=2)n-=i;
+    return !n;
 }
 ```

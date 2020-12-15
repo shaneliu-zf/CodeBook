@@ -5,6 +5,8 @@ text+="[toc]\n"
 
 Filelist = []
 for home,dirs,files in os.walk("."):
+    files = [f for f in files if not f[0] == '.']
+    dirs[:] = [d for d in dirs if not d[0] == '.']
     if home == ".":
         continue
     Filelist.append(home)

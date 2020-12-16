@@ -13,55 +13,6 @@ a,b=(b,a)
 ```python
 a,b=input().split(" ")
 ```
-## Dark_Code
-### rope
-```cpp
-#include<ext/rope>
-using namespace __gnu_cxx;
-rope<char>str;
-```
-### thread
-```cpp
-#include<Thread>
-thread t([](int i){cout<<i<<endl;},1);
-t.join();
-```
-### default_code
-```cpp
-#include<bits/stdc++.h>
-
-#define debug(x) #x<<": "<<x<<" "
-#define endl "\n"
-#define num long long
-
-using namespace std;
-
-int main(){
-	cin.tie(0);
-	ios_base::sync_with_stdio(0);
-
-	return 0;
-}
-```
-### faster_input
-```cpp
-template<typename T>inline T input(){
-    T sum=0,fl=1;
-    int ch=getchar();
-    for(;!isdigit(ch);ch=getchar())if(ch=='-')fl=-1;
-    for(;isdigit(ch);ch=getchar())sum=sum*10+ch-'0';
-    return sum*fl;
-}
-int a=input<int>();
-```
-### random_shuffle
-```cpp
-#include<algorithm>
-#include<cstdlib>
-#include<ctime>
-srand(time(0));
-random_shuffle(a.begin(),a.end());
-```
 ## OOP
 ### function
 ```cpp
@@ -784,4 +735,53 @@ bool isSquareNumber(long long n){
 	for(long long i=1;n;i+=2)n-=i;
     return !n;
 }
+```
+## Dark Code
+### rope
+```cpp
+#include<ext/rope>
+using namespace __gnu_cxx;
+rope<char>str;
+```
+### thread
+```cpp
+#include<Thread>
+thread t([](int i){cout<<i<<endl;},1);
+t.join();
+```
+### default_code
+```cpp
+#include<bits/stdc++.h>
+
+#define debug(x) #x<<": "<<x<<" "
+#define endl "\n"
+#define num long long
+
+using namespace std;
+
+int main(){
+	cin.tie(0);
+	ios_base::sync_with_stdio(0);
+
+	return 0;
+}
+```
+### faster_input
+```cpp
+template<typename T>inline T input(){
+    T sum=0,fl=1;
+    int ch=getchar();
+    for(;!isdigit(ch);ch=getchar())if(ch=='-')fl=-1;
+    for(;isdigit(ch);ch=getchar())sum=sum*10+ch-'0';
+    return sum*fl;
+}
+int a=input<int>();
+```
+### random_shuffle
+```cpp
+#include<algorithm>
+#include<cstdlib>
+#include<ctime>
+srand(time(0));
+random_shuffle(a.begin(),a.end());
 ```

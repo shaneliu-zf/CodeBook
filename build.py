@@ -18,14 +18,15 @@ for file in Filelist:
     try:
         lang = file[file.find('.')+1:]
         if lang == 'sh':
-            lang += 'ell'
+            lang = 'shell'
         elif lang == 'py':
-            lang += 'thon'
+            lang = 'python'
         elif lang == 'hpp':
             lang = 'cpp'
         prog = "### " + file[:file.find('.')] + "\n"
         prog += "```" + lang + "\n"
         f = open(home+"/"+file,'r')
+        print("[add]"+home[2:]+">"+file)
         prog += f.read()
         f.close()
         prog += "```\n"
@@ -37,3 +38,4 @@ for file in Filelist:
 f = open("codebook.md",'w+')
 f.write(text)
 f.close()
+print("It's done.")

@@ -2,19 +2,19 @@
 [toc]
 ## DarkCode
 ### rope
-```cpp
+```c++
 #include<ext/rope>
 using namespace __gnu_cxx;
 rope<char>str;
 ```
 ### thread
-```cpp
+```c++
 #include<Thread>
 thread t([](int i){cout<<i<<endl;},1);
 t.join();
 ```
 ### default_code
-```cpp
+```c++
 #include<bits/stdc++.h>
 
 #define debug(x) #x<<": "<<x<<" "
@@ -31,7 +31,7 @@ int main(){
 }
 ```
 ### faster_input
-```cpp
+```c++
 template<typename T>inline T input(){
     T sum=0,fl=1;
     int ch=getchar();
@@ -42,7 +42,7 @@ template<typename T>inline T input(){
 int a=input<int>();
 ```
 ### random_shuffle
-```cpp
+```c++
 #include<algorithm>
 #include<cstdlib>
 #include<ctime>
@@ -64,7 +64,7 @@ a,b=input().split(" ")
 ```
 ## OOP
 ### function
-```cpp
+```c++
 #include<vector>
 class func:std::vector<double>{
 public:
@@ -103,7 +103,7 @@ public:
 };
 ```
 ### BigInteger
-```cpp
+```c++
 #include<algorithm>
 #include<sstream>
 #include<vector>
@@ -319,7 +319,7 @@ public:
 };
 ```
 ### Matrix
-```cpp
+```c++
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -510,7 +510,7 @@ public:
 };
 ```
 ### fraction
-```cpp
+```c++
 #include<algorithm>
 class Frac:std::pair<int,int>{
 public:
@@ -551,7 +551,7 @@ public:
     friend Frac inverse(Frac a){return Frac(a.second,a.first);}
 };
 ```
-## JAVA
+## Java
 ### BigInteger
 ```java
 import java.math.BigInteger;
@@ -588,7 +588,7 @@ $javac Main
 ```
 ## Algorithm
 ### dijkstra
-```cpp
+```c++
 #include<iostream>
 using namespace std;
 int map[1005][1005];
@@ -637,7 +637,7 @@ int main(){
 }
 ```
 ### 0-1Knapsack
-```cpp
+```c++
 #include<iostream>
 using namespace std;
 struct item{
@@ -661,7 +661,7 @@ int main(){
 ```
 ## Math
 ### Newton_Raphson_Method
-```cpp
+```c++
 double Newton_Raphson_Method(func f,double x=1){
     while(abs(f.setX(x))>0.000001)
       	x-=(f.setX(x)/prime(f).setX(x));
@@ -669,7 +669,7 @@ double Newton_Raphson_Method(func f,double x=1){
 }
 ```
 ### chinese_remainder
-```cpp
+```c++
 //need: gcdExtended
 num chineseRemainder(num a[],num w[],int len){
 	num d,x,y,m,n=1,ret=0;
@@ -683,7 +683,7 @@ num chineseRemainder(num a[],num w[],int len){
 }
 ```
 ### fast_power
-```cpp
+```c++
 inline num fastPower(num a,num b,num mod=0){
 	num ans=1;
 	while(b){
@@ -695,7 +695,7 @@ inline num fastPower(num a,num b,num mod=0){
 }
 ```
 ### gcd_extended
-```cpp
+```c++
 num gcdExtended(num a,num b,num *x,num *y){
     if(!a){*x=0,*y=1;return b;}
     num x1,y1;
@@ -706,7 +706,7 @@ num gcdExtended(num a,num b,num *x,num *y){
 }
 ```
 ### pollard_rho
-```cpp
+```c++
 //need: gcd、fastMulti、fastPower、millerRabin
 inline num pollardRho(num n){
     if(millerRabin(n)){cout<<n<<" ";return n;}
@@ -726,7 +726,7 @@ inline num pollardRho(num n){
 }
 ```
 ### fast_multi
-```cpp
+```c++
 inline num fastMulti(num a,num b,num mod=0){
     num ans=0;
     while(b){
@@ -738,13 +738,13 @@ inline num fastMulti(num a,num b,num mod=0){
 }
 ```
 ### gcd
-```cpp
+```c++
 inline num gcd(num a,num b){
     return a<0?gcd(-a,b):(!a?1:(!b?a:gcd(b,a%b)));
 }// lcm=a*b/gcd(a,b)
 ```
 ### Miller_Rabin
-```cpp
+```c++
 //need: fastMulti、fastPower
 bool millerRabin(num n,int times=20){
 	if(n==2)return true;
@@ -768,7 +768,7 @@ bool millerRabin(num n,int times=20){
 }
 ```
 ### mod_inverse
-```cpp
+```c++
 //need: gcdExtended
 num modInverse(num a,num m){
     num x,y;
@@ -778,7 +778,7 @@ num modInverse(num a,num m){
 }
 ```
 ### SquareNumber
-```cpp
+```c++
 bool isSquareNumber(long long n){
   	if(n<1)return false;
 	for(long long i=1;n;i+=2)n-=i;

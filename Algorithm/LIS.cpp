@@ -1,4 +1,4 @@
-vector<int> LIS(vector<int>& s){
+vector<int> LIS(vector<int> s){
     if(s.empty())return s;
     vector<int>v;
     v.push_back(s[0]);

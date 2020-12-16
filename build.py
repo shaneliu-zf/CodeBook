@@ -26,13 +26,14 @@ for file in Filelist:
         prog = "### " + file[:file.find('.')] + "\n"
         prog += "```" + lang + "\n"
         f = open(home+"/"+file,'r')
-        print("[add]"+home[2:]+">"+file)
+        print("    file> "+file)
         prog += f.read()
         f.close()
         prog += "```\n"
         text += prog
     except:
         home = file
+        print("dir> "+home[2:])
         text += "## "+file[2:]+"\n"
 
 f = open("codebook.md",'w+')

@@ -45,9 +45,10 @@ def buildMD(Filelist):
             text += "## " + home[2:] + "\n"
             print("[dir]"+home[2:])
     writeFile(text)
+    
 print()
 print("=============================================")
-print("歡迎使用櫛風的 CodeBook 產生器")
+print("歡迎使用櫛風的CodeBook產生器")
 print("=============================================")
 Filelist = getFileist()
 buildMD(Filelist)

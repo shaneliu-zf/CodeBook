@@ -636,29 +636,6 @@ int main(){
     return 0;
 }
 ```
-### 0-1Knapsack
-```c++
-#include<iostream>
-using namespace std;
-struct item{
-    int weight,value;
-}items[1005];
-int dp[100005];
-int main(){
-  	int n,m;
-  	cin>>n>>m;
-  	for(int i=0;i<n;i++)cin>>items[i].weight>>items[i].value;
-		for(int i=0;i<n;i++){
-		    for(int j=m;j>=0;j--){
-            if(j-items[i].weight>=0){
-                dp[j]=max(dp[j],dp[j-items[i].weight]+items[i].value);
-            }
-        }
-    }
-    cout<<dp[m]<<endl;
-    return 0;
-}
-```
 ## Math
 ### Newton_Raphson_Method
 ```c++
@@ -784,4 +761,157 @@ bool isSquareNumber(long long n){
 	for(long long i=1;n;i+=2)n-=i;
     return !n;
 }
+```
+## ClassicProblem
+### MahJang
+```c++
+#include <iostream>
+#include <sstream>
+using namespace std;
+string list[]={
+    "","1W","2W","3W","4W","5W","6W","7W","8W","9W",
+    "","1B","2B","3B","4B","5B","6B","7B","8B","9B",
+    "","1S","2S","3S","4S","5S","6S","7S","8S","9S",
+    "","D","","X","","N","","B","","Z","","F","","B"
+};
+int tiles[44]={};
+bool getKorS(int x,int n){
+    if(x==n)return true;
+    for(int m=0;m<44;m++){
+        if(tiles[m]>=3){
+            tiles[m]-=3;
+            if(getKorS(x+1,n))return true;
+            tiles[m]+=3;
+        }
+        else if(tiles[m] && tiles[m+1] && tiles[m+2]){
+            tiles[m]--;
+            tiles[m+1]--;
+            tiles[m+2]--;
+            if(getKorS(x+1,n))return true;
+            tiles[m]++;
+            tiles[m+1]++;
+            tiles[m+2]++;
+        }
+    }
+    return false;
+}
+bool win(int n){
+    for(int i=0;i<44;i++){
+        if(tiles[i]>=2){
+            tiles[i]-=2;
+            if(getKorS(0,n))return true;
+            tiles[i]+=2;
+        }
+    }
+    return false;
+}
+int main(){
+    string x;
+    getline(cin,x);
+    stringstream ss;
+    ss<<x;
+    int n=0;
+    while(ss>>x){
+        for(int i=0;i<44;i++){
+            if(x==list[i])tiles[i]++;
+        }
+        n++;
+    }
+    if(win((n-2)/3))cout<<"Win!"<<endl;
+    else cout<<"Nope"<<endl;
+    return 0;
+}
+```
+### 0-1Knapsack
+```c++
+#include<iostream>
+using namespace std;
+struct item{
+    int weight,value;
+}items[1005];
+int dp[100005];
+int main(){
+  	int n,m;
+  	cin>>n>>m;
+  	for(int i=0;i<n;i++)cin>>items[i].weight>>items[i].value;
+		for(int i=0;i<n;i++){
+		    for(int j=m;j>=0;j--){
+            if(j-items[i].weight>=0){
+                dp[j]=max(dp[j],dp[j-items[i].weight]+items[i].value);
+            }
+        }
+    }
+    cout<<dp[m]<<endl;
+    return 0;
+}
+```
+### MST
+```c++
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+struct edge{
+	int from;
+	int to;
+	int w;
+};
+
+int n, m, ans;		// n個節點, m 條邊, n, m < 100000
+int p[100005];		// 節點的 parent
+edge e[100005];		// 邊的資料
+
+int Find(int x){
+	if(p[x]!=x)p[x]=Find(p[x]);
+	return p[x];
+}
+
+bool Same(int x, int y){return Find(x)==Find(y);}
+void Union(int x, int y){p[Find(x)]=Find(y);}
+bool cmp(edge a,edge b){return a.w<b.w;}
+int main() {
+	cin>>n>>m;
+	for(int i=0;i<=n;i++)p[i]=i;
+	for(int i=0;i<m;i++)cin>>e[i].from>>e[i].to>>e[i].w;
+	sort(e,e+m,cmp);
+	for(int i=0;i<m;i++){
+		if(!Same(e[i].from,e[i].to)){
+			Union(e[i].from,e[i].to);
+			ans+=e[i].w;
+		}
+	}
+	cout<<ans<<endl;
+	return 0;
+}
+
+/*
+範例輸入1:
+
+	6 6
+	1 2 7
+	1 3 1
+	2 4 3
+	2 5 5
+	3 6 2
+	4 6 4
+
+範例輸出1:
+
+	15
+
+範例輸入2:
+
+	7 7
+	1 2 4
+	1 3 2
+	1 4 3
+	2 5 7
+	2 7 1
+	2 6 6
+	3 5 5
+
+範例輸出2:
+
+	21
+*/
 ```

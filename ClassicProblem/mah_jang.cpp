@@ -8,32 +8,31 @@ string list[]={
     "","D","","X","","N","","B","","Z","","F","","B"
 };
 int tiles[44]={};
-bool getKorS(int x,int n){
+bool win(int x,int n){
     if(x==n)return true;
-    for(int m=0;m<44;m++){
+    if(!x){
+        for(int i=0;i<44;i++){
+            if(tiles[i]>=2){
+                tiles[i]-=2;
+                if(win(0,n))return true;
+                tiles[i]+=2;
+            }
+        }
+    }
+    else for(int m=0;m<44;m++){
         if(tiles[m]>=3){
             tiles[m]-=3;
-            if(getKorS(x+1,n))return true;
+            if(win(x+1,n))return true;
             tiles[m]+=3;
         }
         else if(tiles[m] && tiles[m+1] && tiles[m+2]){
             tiles[m]--;
             tiles[m+1]--;
             tiles[m+2]--;
-            if(getKorS(x+1,n))return true;
+            if(win(x+1,n))return true;
             tiles[m]++;
             tiles[m+1]++;
             tiles[m+2]++;
-        }
-    }
-    return false;
-}
-bool win(int n){
-    for(int i=0;i<44;i++){
-        if(tiles[i]>=2){
-            tiles[i]-=2;
-            if(getKorS(0,n))return true;
-            tiles[i]+=2;
         }
     }
     return false;
@@ -50,7 +49,7 @@ int main(){
         }
         n++;
     }
-    if(win((n-2)/3))cout<<"Win!"<<endl;
+    if(win((n+1)/3))cout<<"Win!"<<endl;
     else cout<<"Nope"<<endl;
     return 0;
 }

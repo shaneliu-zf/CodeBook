@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import os
+import sys
 
 def getFileist():
     Filelist = []
@@ -39,7 +40,6 @@ def buildMD(Filelist):
             f.close()
             prog += "```\n"
             text += prog
-
         except:
             home = file
             text += "## " + home[2:] + "\n"
@@ -54,4 +54,6 @@ Filelist = getFileist()
 buildMD(Filelist)
 print("=============================================")
 print("done.\n")
-# os.system("open codebook.md")
+
+if len(sys.argv)>1 and sys.argv[1]=='open':
+        os.system("open codebook.md")

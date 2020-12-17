@@ -1,208 +1,18 @@
-# CodeBook by �ͭ�
+# CodeBook by 櫛風
 [toc]
-## Algorithm
-### dijkstra
-```c++
-#include<iostream>
-using namespace std;
-int map[1005][1005];
-int dis[1005];
-bool vis[1005];
-void dijkstra(int start,int end,int n){
-    int pos;
-    for(int i=0;i<n;i++)dis[i]=map[i][start];
-    vis[start]=true;
-    for(int i=0;i<n-1;i++){
-        pos=s;
-        int min=inf;
-        for(int j=0;j<n;j++){
-            if(!vis[j] && dis[j]<min){
-                min=dis[j];
-                pos=j;
-            }
-        }
-        vis[pos]=true;
-        for(int j=0;j<n;j++){
-            if(!vis[j] && dis[j]>dis[pos]+map[j][pos]){
-                dis[j]=dis[pos]+map[j][pos];
-            }
-        }
-    }
-}
-int main(){
-    int n,m;
-    int a,b,x;
-    int start,end;
-    cin>>n>>m;
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-            map[i][j]=1000000;
-        }
-        map[i][i]=0;
-    }
-    for(int i=0;i<m;i++){
-        cin>>a>>b>>x;
-        map[a][b]=map[b][a]=x;
-    }
-    cin>>start>>end;
-    dijkstra(start,end,n);
-    cout<<(dis[end]!=1000000)?dis[end]:-1<<endl;
-    return 0;
-}
-```
-### MST
-```c++
-#include<iostream>
-#include<algorithm>
-using namespace std;
-
-struct edge{
-	int from;
-	int to;
-	int w;
-};
-
-int n, m, ans;
-int p[100005];
-edge e[100005];
-
-int Find(int x){
-	if(p[x]!=x)p[x]=Find(p[x]);
-	return p[x];
-}
-
-bool Same(int x, int y){return Find(x)==Find(y);}
-void Union(int x, int y){p[Find(x)]=Find(y);}
-bool cmp(edge a,edge b){return a.w<b.w;}
-int main() {
-	cin>>n>>m;
-	for(int i=0;i<=n;i++)p[i]=i;
-	for(int i=0;i<m;i++)cin>>e[i].from>>e[i].to>>e[i].w;
-	sort(e,e+m,cmp);
-	for(int i=0;i<m;i++){
-		if(!Same(e[i].from,e[i].to)){
-			Union(e[i].from,e[i].to);
-			ans+=e[i].w;
-		}
-	}
-	cout<<ans<<endl;
-	return 0;
-}
-```
-### Union_find
-```c++
-#include<iostream>
-using namespace std;
-
-int a[1005];
-int find(int x){
-    if(a[x]!=x)a[x]=find(a[x]);
-    return a[x];
-}
-int main(){
-    int n,m;
-    cin>>n>>m;
-    for(int i=1;i<=n;i++)a[i]=i;
-    int x,y;
-    while(m--){
-        cin>>x>>y;
-        int fx=find(x);
-        int fy=find(y);
-        if(fx!=fy)a[fy]=fx;
-    }
-    //for(int i=1;i<=n;i++)a[i]=find(a[i]);
-    int ans=0;
-    for(int i=1;i<=n;i++){
-        if(a[i]==i)ans++;
-    }
-    cout<<ans<<endl;
-    return 0;
-}
-```
-## ClassicProblem
-### 0-1Knapsack
-```c++
-#include<iostream>
-using namespace std;
-struct item{
-    int weight,value;
-}items[1005];
-int dp[100005];
-int main(){
-  	int n,m;
-  	cin>>n>>m;
-  	for(int i=0;i<n;i++)cin>>items[i].weight>>items[i].value;
-		for(int i=0;i<n;i++){
-		    for(int j=m;j>=0;j--){
-            if(j-items[i].weight>=0){
-                dp[j]=max(dp[j],dp[j-items[i].weight]+items[i].value);
-            }
-        }
-    }
-    cout<<dp[m]<<endl;
-    return 0;
-}
-```
-### MahJang
-```c++
-#include <iostream>
-#include <sstream>
-using namespace std;
-string list[]={
-    "","1W","2W","3W","4W","5W","6W","7W","8W","9W",
-    "","1B","2B","3B","4B","5B","6B","7B","8B","9B",
-    "","1S","2S","3S","4S","5S","6S","7S","8S","9S",
-    "","D","","X","","N","","B","","Z","","F","","B"
-};
-int tiles[44]={};
-bool getKorS(int x,int n){
-    if(x==n)return true;
-    for(int m=0;m<44;m++){
-        if(tiles[m]>=3){
-            tiles[m]-=3;
-            if(getKorS(x+1,n))return true;
-            tiles[m]+=3;
-        }
-        else if(tiles[m] && tiles[m+1] && tiles[m+2]){
-            tiles[m]--;
-            tiles[m+1]--;
-            tiles[m+2]--;
-            if(getKorS(x+1,n))return true;
-            tiles[m]++;
-            tiles[m+1]++;
-            tiles[m+2]++;
-        }
-    }
-    return false;
-}
-bool win(int n){
-    for(int i=0;i<44;i++){
-        if(tiles[i]>=2){
-            tiles[i]-=2;
-            if(getKorS(0,n))return true;
-            tiles[i]+=2;
-        }
-    }
-    return false;
-}
-int main(){
-    string x;
-    getline(cin,x);
-    stringstream ss;
-    ss<<x;
-    int n=0;
-    while(ss>>x){
-        for(int i=0;i<44;i++){
-            if(x==list[i])tiles[i]++;
-        }
-        n++;
-    }
-    if(win((n-2)/3))cout<<"Win!"<<endl;
-    else cout<<"Nope"<<endl;
-    return 0;
-}
-```
 ## DarkCode
+### rope
+```c++
+#include<ext/rope>
+using namespace __gnu_cxx;
+rope<char>str;
+```
+### thread
+```c++
+#include<Thread>
+thread t([](int i){cout<<i<<endl;},1);
+t.join();
+```
 ### default_code
 ```c++
 #include<bits/stdc++.h>
@@ -239,115 +49,59 @@ int a=input<int>();
 srand(time(0));
 random_shuffle(a.begin(),a.end());
 ```
-### rope
-```c++
-#include<ext/rope>
-using namespace __gnu_cxx;
-rope<char>str;
+## Python
+### slice
+```python
+a[begin:end:step]
 ```
-### thread
-```c++
-#include<Thread>
-thread t([](int i){cout<<i<<endl;},1);
-t.join();
+### swap
+```python
+a,b=(b,a)
 ```
-## JAVA
-### BigInteger
-```java
-import java.math.BigInteger;
-BigInteger n1,n2,ans;
-n1=new BigInteger(keyboard.next());
-n2=new BigInteger(keyboard.next());
-ans=n1.add(n2));
-ans=n1.subtract(n2);
-ans=n1.multiply(n2));
-ans=n1.divide(n2));
-ans=n1.mod(n2));
+### input
+```python
+a,b=input().split(" ")
 ```
-### build_and_run
-```shell
-$java Main.java
-$javac Main
-```
-### default_code
-```java
-import java.util.Scanner;
-public class Main{
-	public static void main(String[] args){
-		Scanner keyboard=new Scanner(System.in);
-		String str;
-		int num;
-		while(keyboard.hasNext()){
-			str=keyboard.next();
-			System.out.println(str);
-			num=keyboard.nextInt();
-			System.out.println(num);
-		}
-	}
-}
-```
-## Math
-### chinese_remainder
-```c++
-//need: gcdExtended
-num chineseRemainder(num a[],num w[],int len){
-	num d,x,y,m,n=1,ret=0;
-		for(int i=0;i<len;i++)n*=w[i];
-		for(int i=0;i<len;i++){
-			m=n/w[i];
-			d=gcdExtended(w[i],m,&x,&y);
-			ret=(ret+y*m*a[i])%n;
-		}
-		return (n+ret%n)%n;
-}
-```
-### fast_multi
-```c++
-inline num fastMulti(num a,num b,num mod=0){
-    num ans=0;
-    while(b){
-        if(b&1)ans=(mod)?(ans+a)%mod:ans+a;
-      	a=(mod)?(a<<1)%mod:a<<1;
-        b>>=1;
-    }
-    return ans;
-}
-```
-### fast_power
-```c++
-inline num fastPower(num a,num b,num mod=0){
-	num ans=1;
-	while(b){
-		if(b&1)ans=fastMulti(ans,a,mod);
-		a=fastMulti(a,a,mod);
-		b>>=1;
-	}
-	return ans;
-}
-```
-### gcd
-```c++
-inline num gcd(num a,num b){
-    return a<0?gcd(-a,b):(!a?1:(!b?a:gcd(b,a%b)));
-}// lcm=a*b/gcd(a,b)
-```
-### gcd_extended
-```c++
-num gcdExtended(num a,num b,num *x,num *y){
-    if(!a){*x=0,*y=1;return b;}
-    num x1,y1;
-    num gcd=gcdExtended(b%a,a,&x1,&y1);
-    *x=y1-(b/a)*x1;
-    *y=x1;
-    return gcd;
-}
-```
-## ller_Rabin.hpp
-## d_inverse.hpp
-## wton_Raphson_Method.hpp
-## llard_rho.hpp
-## uareNumber.hpp
 ## OOP
+### function
+```c++
+#include<vector>
+class func:std::vector<double>{
+public:
+    func(int n=0){resize(n);}
+    func(std::vector<double>a){
+        resize(a.size());
+        for(int i=0;i<a.size();i++)at(i)=a[i];
+    }
+    void print(){
+        bool first=true;
+        for(int i=size()-1;i>=0;i--){
+            if(at(i)){
+                std::cout<<((first)?(first=false,""):"+")
+                         <<at(i)<<((i>=1)?"x":"");
+                if(i>1)std::cout<<"^"<<i;
+            }
+        }
+        std::cout<<std::endl;
+    }
+    double setX(double x){
+        double ans=0;
+        double t=1;
+        for(int i=0;i<size();i++){
+            ans+=at(i)*t;
+            t*=x;
+        }
+        return ans;
+    }
+    friend func prime(func a){
+        func b;
+        for(int i=1;i<a.size();i++){
+            b.push_back(a[i]*i);
+        }
+        return b;
+    }
+};
+```
 ### BigInteger
 ```c++
 #include<algorithm>
@@ -564,6 +318,197 @@ public:
     bool operator!(){return (*this)==0;}
 };
 ```
+### Matrix
+```c++
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <vector>
+#include <cassert>
+
+class Matrix:std::vector<std::vector<double>>{
+private:
+	int maxL;
+public:
+	Matrix(int n,int m,double a=0){
+		resize(n);
+		maxL=1;
+		for(int i=0;i<size();i++){
+			at(i).resize(m);
+			if(n<=m)at(i).at(i)=a;
+		}
+	}
+	Matrix(std::vector<std::vector<double>>a){
+		int t;
+		resize(a.size());
+		for(int i=0;i<size();i++){
+			at(i).resize(a[i].size());
+			for(int j=0;j<a[i].size();j++){
+				at(i).at(j)=a[i][j];
+				t=log10(abs(at(i).at(j)))+1;
+				if(at(i).at(j)<0)t++;
+				if(t>maxL)maxL=t;
+			}
+		}
+	}
+	int row()const{return size();}
+	int column()const{return at(0).size();}
+	bool isSqure(){return row()==column();}
+	void operator+=(Matrix other){*this=*this+other;}
+	void operator-=(Matrix other){*this=*this-other;}
+	void operator*=(Matrix other){*this=*this*other;}
+	void operator^=(int times){*this=*this^times;}
+	void print(){
+		for(int i=0;i<row();i++){
+			if(i==0 && i==row()-1)std::cout<<"[";
+			else if(i==0)std::cout<<"⎡";
+			else if(i==row()-1)std::cout<<"⎣";
+			else std::cout<<"⎢";
+			for(int j=0;j<column();j++){
+				std::cout<<std::setw(maxL)<<at(i).at(j);
+				if(j==column()-1){
+					if(i==0 && i==row()-1)std::cout<<"]";
+					else if(i==0)std::cout<<"⎤";
+					else if(i==row()-1)std::cout<<"⎦";
+					else std::cout<<"⎥";
+				}
+				else std::cout<<" ";
+			}
+			std::cout<<std::endl;
+		}
+	}
+	friend std::ostream & operator<<(std::ostream &out,const Matrix &a){
+		for(int i=0;i<a.row();i++){
+			for(int j=0;j<a.column();j++){
+				out<<std::setw(a.maxL)<<a[i][j]<<" \n"[j==a.column()-1];
+			}
+		}
+		return out;
+	}
+	friend std::istream & operator>>(std::istream &in,Matrix &a){
+		int t;
+		for(int i=0;i<a.row();i++){
+			for(int j=0;j<a.column();j++){
+				in>>a[i][j];
+				t=log10(abs(a[i][j]))+1;
+				if(a[i][j]<0)t++;
+				if(t>a.maxL)a.maxL=t;
+			}
+		}
+		return in;
+	}
+	friend int operator==(Matrix a,Matrix b){
+		if(a.row()!=b.row() || a.column()!=b.column())return 0;
+		for(int i=0;i<a.row();i++){
+			for(int j=0;j<a.column();j++){
+				if(a[i][j]!=b[i][j])return -1;
+			}
+		}
+		return 1;
+	}
+	friend bool operator!=(Matrix a,Matrix b){return !(a==b);}
+	friend Matrix operator+(Matrix a,Matrix b){
+		assert(a==b);
+		std::vector<std::vector<double>>c;
+		c.resize(a.row());
+		for(int i=0;i<a.row();i++){
+			c[i].resize(a.column());
+			for(int j=0;j<a.column();j++){
+				c[i][j]=a[i][j]+b[i][j];
+			}
+		}
+		Matrix ans(c);
+		return ans;
+	}
+	friend Matrix operator-(Matrix a,Matrix b){return a+(-1*b);}
+	friend Matrix operator*(Matrix a,double t){
+		Matrix b(a.row(),a.column(),t);
+		return a*b;
+	}
+	friend Matrix operator*(double t,Matrix a){return a*t;}
+	friend Matrix operator*(Matrix a,Matrix b){
+		assert(a==b);
+		std::vector<std::vector<double>>c;
+		c.resize(a.row());
+		for(int i=0;i<a.row();i++){
+			c[i].resize(a.column());
+			for(int j=0;j<a.column();j++){
+				for(int z=0;z<a.column();z++){
+					c[i][j]+=a[i][z]*b[z][j];
+				}
+			}
+		}
+		Matrix ans(c);
+		return ans;
+	}
+	friend Matrix operator^(Matrix a,int t){
+		if(t==-1)return inverse(a);
+		assert(t>0);
+		Matrix b=a;
+		while(--t)b=b*a;
+		return b;
+	}
+	friend Matrix T(Matrix a){
+		std::vector<std::vector<double>> c;
+		c.resize(a.column());
+		for(int i=0;i<a.column();i++){
+			c[i].resize(a.row());
+			for(int j=0;j<a.row();j++){
+				c[i][j]=a[j][i];
+			}
+		}
+		Matrix ans(c);
+		return ans;
+	}
+	friend Matrix inverse(Matrix a){
+		assert(a.isSqure());
+		double d=det(a);
+		assert(d);
+		return (1/d)*adj(a);
+	}
+	friend double det(Matrix a){
+		assert(a.isSqure());
+		double ans=0;
+		if(a.row()==1)ans=a[0][0];
+		else for(int i=0;i<a.column();i++){
+			ans+=pow(-1,i)*a[0][i]*det(cof(a,0,i));
+		}
+		return ans;
+	}
+	friend Matrix cof(Matrix a,int x,int y){
+		assert(a.isSqure());
+		std::vector<std::vector<double>>c;
+		c.resize(a.row()-1);
+		int q=0,w=0;
+		for(int i=0;i<a.row()-1;i++){
+			c[i].resize(a.column()-1);
+			w=0;
+			if(q==x)q++;
+			for(int j=0;j<a.column()-1;j++){
+				if(w==y)w++;
+				c[i][j]=a[q][w];
+				w++;
+			}
+			q++;
+		}
+		Matrix ans(c);
+		return ans;
+	}
+	friend Matrix adj(Matrix a){
+		assert(a.isSqure());
+		std::vector<std::vector<double>>c;
+		c.resize(a.row());
+		for(int i=0;i<a.row();i++){
+			c[i].resize(a.column());
+			for(int j=0;j<a.column();j++){
+				c[i][j]=pow(-1,i+j)*det(cof(a,i,j));
+			}
+		}
+		Matrix ans(c);
+		return T(ans);
+	}
+};
+```
 ### fraction
 ```c++
 #include<algorithm>
@@ -606,56 +551,405 @@ public:
     friend Frac inverse(Frac a){return Frac(a.second,a.first);}
 };
 ```
-### function
+## Java
+### BigInteger
+```java
+import java.math.BigInteger;
+BigInteger n1,n2,ans;
+n1=new BigInteger(keyboard.next());
+n2=new BigInteger(keyboard.next());
+ans=n1.add(n2));
+ans=n1.subtract(n2);
+ans=n1.multiply(n2));
+ans=n1.divide(n2));
+ans=n1.mod(n2));
+```
+### default_code
+```java
+import java.util.Scanner;
+public class Main{
+	public static void main(String[] args){
+		Scanner keyboard=new Scanner(System.in);
+		String str;
+		int num;
+		while(keyboard.hasNext()){
+			str=keyboard.next();
+			System.out.println(str);
+			num=keyboard.nextInt();
+			System.out.println(num);
+		}
+	}
+}
+```
+### build_and_run
+```shell
+$java Main.java
+$javac Main
+```
+## Algorithm
+### dijkstra
 ```c++
-#include<vector>
-class func:std::vector<double>{
-public:
-    func(int n=0){resize(n);}
-    func(std::vector<double>a){
-        resize(a.size());
-        for(int i=0;i<a.size();i++)at(i)=a[i];
-    }
-    void print(){
-        bool first=true;
-        for(int i=size()-1;i>=0;i--){
-            if(at(i)){
-                std::cout<<((first)?(first=false,""):"+")
-                         <<at(i)<<((i>=1)?"x":"");
-                if(i>1)std::cout<<"^"<<i;
+#include<iostream>
+using namespace std;
+int map[1005][1005];
+int dis[1005];
+bool vis[1005];
+void dijkstra(int start,int end,int n){
+    int pos;
+    for(int i=0;i<n;i++)dis[i]=map[i][start];
+    vis[start]=true;
+    for(int i=0;i<n-1;i++){
+        pos=s;
+        int min=inf;
+        for(int j=0;j<n;j++){
+            if(!vis[j] && dis[j]<min){
+                min=dis[j];
+                pos=j;
             }
         }
-        std::cout<<std::endl;
-    }
-    double setX(double x){
-        double ans=0;
-        double t=1;
-        for(int i=0;i<size();i++){
-            ans+=at(i)*t;
-            t*=x;
+        vis[pos]=true;
+        for(int j=0;j<n;j++){
+            if(!vis[j] && dis[j]>dis[pos]+map[j][pos]){
+                dis[j]=dis[pos]+map[j][pos];
+            }
         }
-        return ans;
     }
-    friend func prime(func a){
-        func b;
-        for(int i=1;i<a.size();i++){
-            b.push_back(a[i]*i);
+}
+int main(){
+    int n,m;
+    int a,b,x;
+    int start,end;
+    cin>>n>>m;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            map[i][j]=1000000;
         }
-        return b;
+        map[i][i]=0;
     }
+    for(int i=0;i<m;i++){
+        cin>>a>>b>>x;
+        map[a][b]=map[b][a]=x;
+    }
+    cin>>start>>end;
+    dijkstra(start,end,n);
+    cout<<(dis[end]!=1000000)?dis[end]:-1<<endl;
+    return 0;
+}
+```
+### LIS
+```c++
+vector<int> LIS(vector<int> s){
+    if(s.empty())return s;
+    vector<int>v;
+    v.push_back(s[0]);
+    for(int i=1;i<s.size();i++){
+        double n=s[i];
+        if(n>v.back())v.push_back(n);
+        else{
+            *lower_bound(v.begin(),v.end(),n)=n;
+        }
+    }
+    return v;
+}
+```
+### Union_find
+```c++
+#include<iostream>
+using namespace std;
+
+int a[1005];
+int find(int x){
+    if(a[x]!=x)a[x]=find(a[x]);
+    return a[x];
+}
+int main(){
+    int n,m;
+    cin>>n>>m;
+    for(int i=1;i<=n;i++)a[i]=i;
+    int x,y;
+    while(m--){
+        cin>>x>>y;
+        int fx=find(x);
+        int fy=find(y);
+        if(fx!=fy)a[fy]=fx;
+    }
+    //for(int i=1;i<=n;i++)a[i]=find(a[i]);
+    int ans=0;
+    for(int i=1;i<=n;i++){
+        if(a[i]==i)ans++;
+    }
+    cout<<ans<<endl;
+    return 0;
+}
+```
+### MST
+```c++
+#include<iostream>
+#include<algorithm>
+using namespace std;
+struct edge{int from,to,w;};
+int n, m, ans;
+int p[100005];
+edge e[100005];
+int Find(int x){
+	if(p[x]!=x)p[x]=Find(p[x]);
+	return p[x];
+}
+bool Same(int x, int y){return Find(x)==Find(y);}
+void Union(int x, int y){p[Find(x)]=Find(y);}
+bool cmp(edge a,edge b){return a.w<b.w;}
+int main(){
+	cin>>n>>m;
+	for(int i=0;i<=n;i++)p[i]=i;
+	for(int i=0;i<m;i++)cin>>e[i].from>>e[i].to>>e[i].w;
+	sort(e,e+m,cmp);
+	for(int i=0;i<m;i++){
+		if(!Same(e[i].from,e[i].to)){
+			Union(e[i].from,e[i].to);
+			ans+=e[i].w;
+		}
+	}
+	cout<<ans<<endl;
+	return 0;
+}
+```
+## Math
+### Newton_Raphson_Method
+```c++
+double Newton_Raphson_Method(func f,double x=1){
+    while(abs(f.setX(x))>0.000001)
+      	x-=(f.setX(x)/prime(f).setX(x));
+    return x;
+}
+```
+### chinese_remainder
+```c++
+//need: gcdExtended
+num chineseRemainder(num a[],num w[],int len){
+	num d,x,y,m,n=1,ret=0;
+		for(int i=0;i<len;i++)n*=w[i];
+		for(int i=0;i<len;i++){
+			m=n/w[i];
+			d=gcdExtended(w[i],m,&x,&y);
+			ret=(ret+y*m*a[i])%n;
+		}
+		return (n+ret%n)%n;
+}
+```
+### fast_power
+```c++
+inline num fastPower(num a,num b,num mod=0){
+	num ans=1;
+	while(b){
+		if(b&1)ans=fastMulti(ans,a,mod);
+		a=fastMulti(a,a,mod);
+		b>>=1;
+	}
+	return ans;
+}
+```
+### gcd_extended
+```c++
+num gcdExtended(num a,num b,num *x,num *y){
+    if(!a){*x=0,*y=1;return b;}
+    num x1,y1;
+    num gcd=gcdExtended(b%a,a,&x1,&y1);
+    *x=y1-(b/a)*x1;
+    *y=x1;
+    return gcd;
+}
+```
+### pollard_rho
+```c++
+//need: gcd、fastMulti、fastPower、millerRabin
+inline num pollardRho(num n){
+    if(millerRabin(n)){cout<<n<<" ";return n;}
+    num p=n;
+    while(p==n)p=[](int n){
+   	    num c=rand()%(n-1)+1;
+    	num k=2,x=1ll*rand()%n+1,y=x;
+    	for(num i=2;;i++){
+        	x=(fastMulti(x,x,n)+c)%n;
+    		num d=gcd(x-y,n);
+    		if(d!=1 && d!=n)return d;
+    		if(y==x)return n;
+    		if(i==k)k<<=1,y=x;
+   		}
+	}(p);
+    return max(pollardRho(p),pollardRho(n/p));
+}
+```
+### fast_multi
+```c++
+inline num fastMulti(num a,num b,num mod=0){
+    num ans=0;
+    while(b){
+        if(b&1)ans=(mod)?(ans+a)%mod:ans+a;
+      	a=(mod)?(a<<1)%mod:a<<1;
+        b>>=1;
+    }
+    return ans;
+}
+```
+### gcd
+```c++
+inline num gcd(num a,num b){
+    return a<0?gcd(-a,b):(!a?1:(!b?a:gcd(b,a%b)));
+}// lcm=a*b/gcd(a,b)
+```
+### Miller_Rabin
+```c++
+//need: fastMulti、fastPower
+bool millerRabin(num n,int times=20){
+	if(n==2)return true;
+	if(n<2||n%2==0)return false;
+	for(int i=1;i<=times;){
+        num tem=n-1;
+        int j=0;
+        while(tem%2==0){tem/=2;j++;}
+        num a=((double)rand()/RAND_MAX*(n-2)+0.5)+1;
+        num x=fastPower(a,tem,n);
+        if(x!=1 && x!=n-1){
+            while(j--){
+                x=fastMulti(x,x,n);
+                if(x==n-1)goto next;
+            }
+            return false;
+        }
+        next:i++;
+	}
+	return true;
+}
+```
+### mod_inverse
+```c++
+//need: gcdExtended
+num modInverse(num a,num m){
+    num x,y;
+    num g=gcdExtended(a,m,&x,&y);
+    if(g!=1)return 0;
+    else return (x%m+m)%m;
+}
+```
+### SquareNumber
+```c++
+bool isSquareNumber(long long n){
+  	if(n<1)return false;
+	for(long long i=1;n;i+=2)n-=i;
+    return !n;
+}
+```
+### LangrangePolynomial
+```c++
+#include<iostream>
+#include<iostream>
+using namespace std;
+double arr_x[1005],arr_y[1005];
+double lagrangePolynomial(double x,int n){
+    double ans=0;
+    double t1,t2;
+    for(int i=0;i<n;i++){
+        t1=t2=1;
+        for(int j=0;j<n;j++){
+            if(i==j)continue;
+            t1*=x-arr_x[j];
+            t2*=arr_x[i]-arr_x[j];
+        }
+        ans+=arr_y[i]*(t1/t2);
+    }
+    return ans;
+}
+int main(){
+    int n,x;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>arr_x[i]>>arr_y[i];
+    }
+    cin>>x;
+    cout<<lagrangePolynomial(x,n)<<endl;
+    return 0;
+}
+```
+## ClassicProblem
+### MahJang
+```c++
+#include <iostream>
+#include <sstream>
+using namespace std;
+string list[]={
+    "","1W","2W","3W","4W","5W","6W","7W","8W","9W",
+    "","1B","2B","3B","4B","5B","6B","7B","8B","9B",
+    "","1S","2S","3S","4S","5S","6S","7S","8S","9S",
+    "","D","","X","","N","","B","","Z","","F","","B"
 };
+int tiles[44]={};
+bool getKorS(int x,int n){
+    if(x==n)return true;
+    for(int m=0;m<44;m++){
+        if(tiles[m]>=3){
+            tiles[m]-=3;
+            if(getKorS(x+1,n))return true;
+            tiles[m]+=3;
+        }
+        else if(tiles[m] && tiles[m+1] && tiles[m+2]){
+            tiles[m]--;
+            tiles[m+1]--;
+            tiles[m+2]--;
+            if(getKorS(x+1,n))return true;
+            tiles[m]++;
+            tiles[m+1]++;
+            tiles[m+2]++;
+        }
+    }
+    return false;
+}
+bool win(int n){
+    for(int i=0;i<44;i++){
+        if(tiles[i]>=2){
+            tiles[i]-=2;
+            if(getKorS(0,n))return true;
+            tiles[i]+=2;
+        }
+    }
+    return false;
+}
+int main(){
+    string x;
+    getline(cin,x);
+    stringstream ss;
+    ss<<x;
+    int n=0;
+    while(ss>>x){
+        for(int i=0;i<44;i++){
+            if(x==list[i])tiles[i]++;
+        }
+        n++;
+    }
+    if(win((n-2)/3))cout<<"Win!"<<endl;
+    else cout<<"Nope"<<endl;
+    return 0;
+}
 ```
-## trix.hpp
-## Python
-### input
-```python
-a,b=input().split(" ")
-```
-### slice
-```python
-a[begin:end:step]
-```
-### swap
-```python
-a,b=(b,a)
+### 0-1Knapsack
+```c++
+#include<iostream>
+using namespace std;
+struct item{
+    int weight,value;
+}items[1005];
+int dp[100005];
+int main(){
+  	int n,m;
+  	cin>>n>>m;
+  	for(int i=0;i<n;i++)cin>>items[i].weight>>items[i].value;
+		for(int i=0;i<n;i++){
+		    for(int j=m;j>=0;j--){
+            if(j-items[i].weight>=0){
+                dp[j]=max(dp[j],dp[j-items[i].weight]+items[i].value);
+            }
+        }
+    }
+    cout<<dp[m]<<endl;
+    return 0;
+}
 ```

@@ -1,6 +1,5 @@
 #include<iostream>
 using namespace std;
-
 int a[1005];
 int find(int x){
     if(a[x]!=x)a[x]=find(a[x]);

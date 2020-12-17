@@ -63,7 +63,7 @@ a,b=(b,a)
 a,b=input().split(" ")
 ```
 ## OOP
-### function
+### Function
 ```c++
 #include<vector>
 class func:std::vector<double>{
@@ -509,7 +509,7 @@ public:
 	}
 };
 ```
-### fraction
+### Fraction
 ```c++
 #include<algorithm>
 class Frac:std::pair<int,int>{
@@ -652,8 +652,9 @@ vector<int> LIS(vector<int> s){
     return v;
 }
 ```
-### Union_find
+### union_find
 ```c++
+
 #include<iostream>
 using namespace std;
 
@@ -714,12 +715,20 @@ int main(){
 }
 ```
 ## Math
-### Newton_Raphson_Method
+### newton_raphson_method
 ```c++
 double Newton_Raphson_Method(func f,double x=1){
     while(abs(f.setX(x))>0.000001)
       	x-=(f.setX(x)/prime(f).setX(x));
     return x;
+}
+```
+### square_number
+```c++
+bool isSquareNumber(long long n){
+  	if(n<1)return false;
+	for(long long i=1;n;i+=2)n-=i;
+    return !n;
 }
 ```
 ### chinese_remainder
@@ -746,6 +755,23 @@ inline num fastPower(num a,num b,num mod=0){
 		b>>=1;
 	}
 	return ans;
+}
+```
+### langrange_polynomial
+```c++
+double lagrangePolynomial(double arr_x[],double arr_y[],double x,int n){
+    double ans=0;
+    double t1,t2;
+    for(int i=0;i<n;i++){
+        t1=t2=1;
+        for(int j=0;j<n;j++){
+            if(i==j)continue;
+            t1*=x-arr_x[j];
+            t2*=arr_x[i]-arr_x[j];
+        }
+        ans+=arr_y[i]*(t1/t2);
+    }
+    return ans;
 }
 ```
 ### gcd_extended
@@ -797,7 +823,7 @@ inline num gcd(num a,num b){
     return a<0?gcd(-a,b):(!a?1:(!b?a:gcd(b,a%b)));
 }// lcm=a*b/gcd(a,b)
 ```
-### Miller_Rabin
+### miller_rabin
 ```c++
 //need: fastMulti、fastPower
 bool millerRabin(num n,int times=20){
@@ -831,47 +857,31 @@ num modInverse(num a,num m){
     else return (x%m+m)%m;
 }
 ```
-### SquareNumber
+## ClassicProblem
+### 0-1Knapsack
 ```c++
-bool isSquareNumber(long long n){
-  	if(n<1)return false;
-	for(long long i=1;n;i+=2)n-=i;
-    return !n;
-}
-```
-### LangrangePolynomial
-```c++
-#include<iostream>
 #include<iostream>
 using namespace std;
-double arr_x[1005],arr_y[1005];
-double lagrangePolynomial(double x,int n){
-    double ans=0;
-    double t1,t2;
-    for(int i=0;i<n;i++){
-        t1=t2=1;
-        for(int j=0;j<n;j++){
-            if(i==j)continue;
-            t1*=x-arr_x[j];
-            t2*=arr_x[i]-arr_x[j];
-        }
-        ans+=arr_y[i]*(t1/t2);
-    }
-    return ans;
-}
+struct item{
+    int weight,value;
+}items[1005];
+int dp[100005];
 int main(){
-    int n,x;
-    cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>arr_x[i]>>arr_y[i];
+  	int n,m;
+  	cin>>n>>m;
+  	for(int i=0;i<n;i++)cin>>items[i].weight>>items[i].value;
+		for(int i=0;i<n;i++){
+		    for(int j=m;j>=0;j--){
+            if(j-items[i].weight>=0){
+                dp[j]=max(dp[j],dp[j-items[i].weight]+items[i].value);
+            }
+        }
     }
-    cin>>x;
-    cout<<lagrangePolynomial(x,n)<<endl;
+    cout<<dp[m]<<endl;
     return 0;
 }
 ```
-## ClassicProblem
-### MahJang
+### mah_jang
 ```c++
 #include <iostream>
 #include <sstream>
@@ -927,29 +937,6 @@ int main(){
     }
     if(win((n-2)/3))cout<<"Win!"<<endl;
     else cout<<"Nope"<<endl;
-    return 0;
-}
-```
-### 0-1Knapsack
-```c++
-#include<iostream>
-using namespace std;
-struct item{
-    int weight,value;
-}items[1005];
-int dp[100005];
-int main(){
-  	int n,m;
-  	cin>>n>>m;
-  	for(int i=0;i<n;i++)cin>>items[i].weight>>items[i].value;
-		for(int i=0;i<n;i++){
-		    for(int j=m;j>=0;j--){
-            if(j-items[i].weight>=0){
-                dp[j]=max(dp[j],dp[j-items[i].weight]+items[i].value);
-            }
-        }
-    }
-    cout<<dp[m]<<endl;
     return 0;
 }
 ```

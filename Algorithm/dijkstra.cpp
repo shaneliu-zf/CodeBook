@@ -23,6 +23,7 @@ void dijkstra(int start,int end,int n){
             }
         }
     }
+    return;
 }
 int main(){
     int n,m;

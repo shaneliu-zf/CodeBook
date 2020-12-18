@@ -31,7 +31,7 @@ def buildMD(Filelist):
     for file in Filelist:
         try:
             lang = getLang(file[file.find('.')+1:])
-            filename = file[:file.find('.')]
+            filename = file[:file.find('.')].replace('_',' ')
             prog = "### " + filename + "\n"
             prog += "```" + lang + "\n"
             f = open(home+"/"+file,'r')

@@ -13,7 +13,7 @@ rope<char>str;
 thread t([](int i){cout<<i<<endl;},1);
 t.join();
 ```
-### default_code
+### default code
 ```c++
 #include<bits/stdc++.h>
 
@@ -30,7 +30,7 @@ int main(){
 	return 0;
 }
 ```
-### faster_input
+### faster input
 ```c++
 template<typename T>inline T input(){
     T sum=0,fl=1;
@@ -38,16 +38,7 @@ template<typename T>inline T input(){
     for(;!isdigit(ch);ch=getchar())if(ch=='-')fl=-1;
     for(;isdigit(ch);ch=getchar())sum=sum*10+ch-'0';
     return sum*fl;
-}
-int a=input<int>();
-```
-### random_shuffle
-```c++
-#include<algorithm>
-#include<cstdlib>
-#include<ctime>
-srand(time(0));
-random_shuffle(a.begin(),a.end());
+}//int a=input<int>();
 ```
 ## Python
 ### slice
@@ -188,11 +179,11 @@ private:
     bigN abs()const{
         bigN res=*this;
         return res.negative=0,res;
-	}
+    }
 public:
     bigN():negative(0){}
-	bigN(const_iterator a,const_iterator b):vector<long long>(a,b){}
-	bigN(std::string s){
+    bigN(const_iterator a,const_iterator b):vector<long long>(a,b){}
+    bigN(std::string s){
         if(s.empty())return;
         if(s[0]=='-')negative=1,s=s.substr(1);
         else negative=0;
@@ -201,82 +192,82 @@ public:
             for(int j=std::max(0,i-width+1);j<=i;++j)
                 t=t*10+s[j]-'0';
             push_back(t);
-		}
+        }
         trim();
-	}
-	template<typename T>bigN(const T &x){
-    	std::stringstream ss;
-    	ss<<x;
+    }
+    template<typename T>bigN(const T &x){
+        std::stringstream ss;
+        ss<<x;
         *this=ss.str();
     }
-	bool operator<(const bigN&b)const{return cmp(b)<0;}
-	bool operator>(const bigN&b)const{return cmp(b)>0;}
-	bool operator<=(const bigN&b)const{return cmp(b)<=0;}
-	bool operator>=(const bigN&b)const{return cmp(b)>=0;}
-	bool operator==(const bigN&b)const{return !cmp(b);}
-	bool operator!=(const bigN&b)const{return cmp(b)!=0;}
-	bigN operator-()const{bigN res=*this;return res.negative=!negative,res.trim(),res;}
-	bigN operator+(const bigN &b)const{
-		if(negative)return -(-(*this)+(-b));
-		if(b.negative)return *this-(-b);
-		bigN res=*this;
-		if(b.size()>size())res.resize(b.size());
-		for(size_t i=0;i<b.size();++i)res[i]+=b[i];
-		return res.carry(),res.trim(),res;
-	}
-	bigN operator-(const bigN &b)const{
-		if(negative)return -(-(*this)-(-b));
-		if(b.negative)return *this+(-b);
-		if(abscmp(b)<0)return -(b-(*this));
-		bigN res=*this;
-		if(b.size()>size())res.resize(b.size());
-		for(size_t i=0;i<b.size();++i)res[i]-=b[i];
-		return res.carry(),res.trim(),res;
-	}
+    bool operator<(const bigN&b)const{return cmp(b)<0;}
+    bool operator>(const bigN&b)const{return cmp(b)>0;}
+    bool operator<=(const bigN&b)const{return cmp(b)<=0;}
+    bool operator>=(const bigN&b)const{return cmp(b)>=0;}
+    bool operator==(const bigN&b)const{return !cmp(b);}
+    bool operator!=(const bigN&b)const{return cmp(b)!=0;}
+    bigN operator-()const{bigN res=*this;return res.negative=!negative,res.trim(),res;}
+    bigN operator+(const bigN &b)const{
+        if(negative)return -(-(*this)+(-b));
+        if(b.negative)return *this-(-b);
+        bigN res=*this;
+        if(b.size()>size())res.resize(b.size());
+        for(size_t i=0;i<b.size();++i)res[i]+=b[i];
+        return res.carry(),res.trim(),res;
+    }
+    bigN operator-(const bigN &b)const{
+        if(negative)return -(-(*this)-(-b));
+        if(b.negative)return *this+(-b);
+        if(abscmp(b)<0)return -(b-(*this));
+        bigN res=*this;
+        if(b.size()>size())res.resize(b.size());
+        for(size_t i=0;i<b.size();++i)res[i]-=b[i];
+        return res.carry(),res.trim(),res;
+    }
     bigN operator*(const bigN &b)const{
-    	const static int mul_base=1000000,mul_width=log10(mul_base);
-		bigN A=convert_base(width,mul_width);
-		bigN B=b.convert_base(width,mul_width);
-    	int n=std::max(A.size(),B.size());
-    	while(n&(n-1))++n;
-    	A.resize(n),B.resize(n);
-    	bigN res=A.karatsuba(B);
-    	res.negative=negative!=b.negative;
-    	res.carry(mul_base);
-    	res=res.convert_base(mul_width,width);
-    	return res.trim(),res;
+        const static int mul_base=1000000,mul_width=log10(mul_base);
+        bigN A=convert_base(width,mul_width);
+        bigN B=b.convert_base(width,mul_width);
+        int n=std::max(A.size(),B.size());
+        while(n&(n-1))++n;
+        A.resize(n),B.resize(n);
+        bigN res=A.karatsuba(B);
+        res.negative=negative!=b.negative;
+        res.carry(mul_base);
+        res=res.convert_base(mul_width,width);
+        return res.trim(),res;
     }
     bigN operator*(long long b)const{
-    	bigN res=*this;
+        bigN res=*this;
         long long a;
-    	if(b<0)res.negative=!negative,b=-b;
-    	for(size_t i=0,is=0;i<res.size()||is;++i){
-    		if(i==res.size())res.push_back(0);
-    		a=res[i]*b+is;
-    		is=a/base;
-    		res[i]=a%base;
-    	}
-    	return res.trim(),res;
+        if(b<0)res.negative=!negative,b=-b;
+        for(size_t i=0,is=0;i<res.size()||is;++i){
+            if(i==res.size())res.push_back(0);
+            a=res[i]*b+is;
+            is=a/base;
+            res[i]=a%base;
+        }
+        return res.trim(),res;
     }
     bigN operator/(const bigN &b)const{
-		int norm=base/(b.back()+1);
-		bigN x=abs()*norm;
-		bigN y=b.abs()*norm;
-		bigN q,r;
-		q.resize(x.size());
-		for(int i=int(x.size())-1;i>=0;--i){
-			r=r*base+x[i];
-			int s1=r.size()<=y.size()?0:r[y.size()];
-			int s2=r.size()<y.size()?0:r[y.size()-1];
-			int d=((long long)(base)*s1+s2)/y.back();
-			r=r-y*d;
-			while(r.negative)r=r+y,--d;
-			q[i]=d;
-		}
-		q.negative=negative!=b.negative;
-		return q.trim(),q;
+        int norm=base/(b.back()+1);
+        bigN x=abs()*norm;
+        bigN y=b.abs()*norm;
+        bigN q,r;
+        q.resize(x.size());
+        for(int i=int(x.size())-1;i>=0;--i){
+            r=r*base+x[i];
+            int s1=r.size()<=y.size()?0:r[y.size()];
+            int s2=r.size()<y.size()?0:r[y.size()-1];
+            int d=((long long)(base)*s1+s2)/y.back();
+            r=r-y*d;
+            while(r.negative)r=r+y,--d;
+            q[i]=d;
+        }
+        q.negative=negative!=b.negative;
+        return q.trim(),q;
     }
-	bigN operator%(const bigN &b)const{return *this-(*this/b)*b;}
+    bigN operator%(const bigN &b)const{return *this-(*this/b)*b;}
     bigN operator<<(const int &b)const{
         bigN res=*this;
         for(int i=0;i<b;i++)res*=2;
@@ -287,20 +278,20 @@ public:
         for(int i=0;i<b;i++)res/=2;
         return res.carry(),res.trim(),res;
     }
-	friend std::istream& operator>>(std::istream &ss,bigN &b){
-		std::string s;
-		return ss>>s,b=s,ss;
+    friend std::istream& operator>>(std::istream &ss,bigN &b){
+        std::string s;
+        return ss>>s,b=s,ss;
     }
-	friend std::ostream& operator<<(std::ostream &ss,const bigN &b){
-		if(b.negative)ss<<'-';
-		ss<<(b.empty()?0:b.back());
-		for(int i=int(b.size())-2;i>=0;--i)
-		ss<<std::setw(width)<<std::setfill('0')<<b[i];
-		return ss;
+    friend std::ostream& operator<<(std::ostream &ss,const bigN &b){
+        if(b.negative)ss<<'-';
+        ss<<(b.empty()?0:b.back());
+        for(int i=int(b.size())-2;i>=0;--i)
+        ss<<std::setw(width)<<std::setfill('0')<<b[i];
+        return ss;
     }
-	template<typename T>operator T(){
-		std::stringstream ss;
-		ss<<*this;
+    template<typename T>operator T(){
+        std::stringstream ss;
+        ss<<*this;
         T res;
         return ss>>res,res;
     }
@@ -564,7 +555,7 @@ ans=n1.multiply(n2));
 ans=n1.divide(n2));
 ans=n1.mod(n2));
 ```
-### default_code
+### default code
 ```java
 import java.util.Scanner;
 public class Main{
@@ -580,11 +571,6 @@ public class Main{
 		}
 	}
 }
-```
-### build_and_run
-```shell
-$java Main.java
-$javac Main
 ```
 ## Algorithm
 ### dijkstra
@@ -614,6 +600,7 @@ void dijkstra(int start,int end,int n){
             }
         }
     }
+    return;
 }
 int main(){
     int n,m;
@@ -636,7 +623,7 @@ int main(){
     return 0;
 }
 ```
-### LIS
+### lis
 ```c++
 vector<int> LIS(vector<int> s){
     if(s.empty())return s;
@@ -652,12 +639,10 @@ vector<int> LIS(vector<int> s){
     return v;
 }
 ```
-### union_find
+### union find
 ```c++
-
 #include<iostream>
 using namespace std;
-
 int a[1005];
 int find(int x){
     if(a[x]!=x)a[x]=find(a[x]);
@@ -683,7 +668,7 @@ int main(){
     return 0;
 }
 ```
-### MST
+### mst
 ```c++
 #include<iostream>
 #include<algorithm>
@@ -715,7 +700,7 @@ int main(){
 }
 ```
 ## Math
-### newton_raphson_method
+### newton raphson method
 ```c++
 double Newton_Raphson_Method(func f,double x=1){
     while(abs(f.setX(x))>0.000001)
@@ -723,7 +708,7 @@ double Newton_Raphson_Method(func f,double x=1){
     return x;
 }
 ```
-### square_number
+### square number
 ```c++
 bool isSquareNumber(long long n){
   	if(n<1)return false;
@@ -731,21 +716,7 @@ bool isSquareNumber(long long n){
     return !n;
 }
 ```
-### chinese_remainder
-```c++
-//need: gcdExtended
-num chineseRemainder(num a[],num w[],int len){
-	num d,x,y,m,n=1,ret=0;
-		for(int i=0;i<len;i++)n*=w[i];
-		for(int i=0;i<len;i++){
-			m=n/w[i];
-			d=gcdExtended(w[i],m,&x,&y);
-			ret=(ret+y*m*a[i])%n;
-		}
-		return (n+ret%n)%n;
-}
-```
-### fast_power
+### fast power
 ```c++
 inline num fastPower(num a,num b,num mod=0){
 	num ans=1;
@@ -757,7 +728,7 @@ inline num fastPower(num a,num b,num mod=0){
 	return ans;
 }
 ```
-### langrange_polynomial
+### langrange polynomial
 ```c++
 double lagrangePolynomial(double arr_x[],double arr_y[],double x,int n){
     double ans=0;
@@ -774,7 +745,7 @@ double lagrangePolynomial(double arr_x[],double arr_y[],double x,int n){
     return ans;
 }
 ```
-### gcd_extended
+### gcd extended
 ```c++
 num gcdExtended(num a,num b,num *x,num *y){
     if(!a){*x=0,*y=1;return b;}
@@ -785,7 +756,7 @@ num gcdExtended(num a,num b,num *x,num *y){
     return gcd;
 }
 ```
-### pollard_rho
+### pollard rho
 ```c++
 //need: gcd、fastMulti、fastPower、millerRabin
 inline num pollardRho(num n){
@@ -805,7 +776,7 @@ inline num pollardRho(num n){
     return max(pollardRho(p),pollardRho(n/p));
 }
 ```
-### fast_multi
+### fast multi
 ```c++
 inline num fastMulti(num a,num b,num mod=0){
     num ans=0;
@@ -823,7 +794,7 @@ inline num gcd(num a,num b){
     return a<0?gcd(-a,b):(!a?1:(!b?a:gcd(b,a%b)));
 }// lcm=a*b/gcd(a,b)
 ```
-### miller_rabin
+### miller rabin
 ```c++
 //need: fastMulti、fastPower
 bool millerRabin(num n,int times=20){
@@ -847,7 +818,7 @@ bool millerRabin(num n,int times=20){
 	return true;
 }
 ```
-### mod_inverse
+### mod inverse
 ```c++
 //need: gcdExtended
 num modInverse(num a,num m){
@@ -857,31 +828,36 @@ num modInverse(num a,num m){
     else return (x%m+m)%m;
 }
 ```
+### chinese remainder
+```c++
+//need: gcdExtended
+num chineseRemainder(num a[],num w[],int len){
+	num d,x,y,m,n=1,ret=0;
+		for(int i=0;i<len;i++)n*=w[i];
+		for(int i=0;i<len;i++){
+			m=n/w[i];
+			d=gcdExtended(w[i],m,&x,&y);
+			ret=(ret+y*m*a[i])%n;
+		}
+		return (n+ret%n)%n;
+}
+```
 ## ClassicProblem
 ### 0-1Knapsack
 ```c++
-#include<iostream>
-using namespace std;
-struct item{
-    int weight,value;
-}items[1005];
 int dp[100005];
-int main(){
-  	int n,m;
-  	cin>>n>>m;
-  	for(int i=0;i<n;i++)cin>>items[i].weight>>items[i].value;
-		for(int i=0;i<n;i++){
-		    for(int j=m;j>=0;j--){
-            if(j-items[i].weight>=0){
-                dp[j]=max(dp[j],dp[j-items[i].weight]+items[i].value);
+int Knapsack(int weight[],int value[],int n,int m){
+    for(int i=0;i<n;i++){
+	    for(int j=m;j>=0;j--){
+            if(j-weight[i]>=0){
+                dp[j]=max(dp[j],dp[j-weight[i]]+value[i]);
             }
         }
     }
-    cout<<dp[m]<<endl;
-    return 0;
+    return dp[m];
 }
 ```
-### mah_jang
+### mah jang
 ```c++
 #include <iostream>
 #include <sstream>
@@ -893,32 +869,31 @@ string list[]={
     "","D","","X","","N","","B","","Z","","F","","B"
 };
 int tiles[44]={};
-bool getKorS(int x,int n){
+bool win(int x,int n){
     if(x==n)return true;
-    for(int m=0;m<44;m++){
+    if(!x){
+        for(int i=0;i<44;i++){
+            if(tiles[i]>=2){
+                tiles[i]-=2;
+                if(win(0,n))return true;
+                tiles[i]+=2;
+            }
+        }
+    }
+    else for(int m=0;m<44;m++){
         if(tiles[m]>=3){
             tiles[m]-=3;
-            if(getKorS(x+1,n))return true;
+            if(win(x+1,n))return true;
             tiles[m]+=3;
         }
         else if(tiles[m] && tiles[m+1] && tiles[m+2]){
             tiles[m]--;
             tiles[m+1]--;
             tiles[m+2]--;
-            if(getKorS(x+1,n))return true;
+            if(win(x+1,n))return true;
             tiles[m]++;
             tiles[m+1]++;
             tiles[m+2]++;
-        }
-    }
-    return false;
-}
-bool win(int n){
-    for(int i=0;i<44;i++){
-        if(tiles[i]>=2){
-            tiles[i]-=2;
-            if(getKorS(0,n))return true;
-            tiles[i]+=2;
         }
     }
     return false;
@@ -935,7 +910,7 @@ int main(){
         }
         n++;
     }
-    if(win((n-2)/3))cout<<"Win!"<<endl;
+    if(win((n+1)/3))cout<<"Win!"<<endl;
     else cout<<"Nope"<<endl;
     return 0;
 }

@@ -1,44 +1,49 @@
-#include<iostream>
-#include<cstdlib>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 using namespace std;
 
-int a[1000005];
+const int d[2]={1,-1};
+int n;
+struct Point{
+    double x,d;
+}p[105];
 
-double simulatedAnnealing(int n,int now){
-    double T=3000;
-    double T_min=1e-12;
-    double r=0.996;
-    while(T>T_min){
-        val next=now+(rand()*2-RAND_MAX)*T;
-        double delta=a[now]-a[next];
-        if(delta<0)now=next;
-        else{
-            if( (-delta/T)*RAND_MAX > rand() ){
-                now=next;
-            }
-        }
-        if(a[now]>a[ans])ans=now;
-        T*=r;
+double getdis(Point P){
+    double ans=0;
+    for(int i=0;i<n;i++){
+        ans+=abs(P.x-p[i].x);
     }
     return ans;
 }
-
-int main(){
-    srand(1000);
-    int n;
-    cin>>n;
-    for(int i=0;i<n;i++)cin>>a[i];
-    double ans=n/2;
-    for(int i=0;i<5;i++){
-        ans=simulatedAnnealing(ans);
+double ans=1e20;
+void simulatedAnnealing(){
+    double T=1e4;
+    double T_min=1e-3;
+    double r=0.83;
+    Point now;
+    now.x=rand()%10001;
+    now.d=getdis(now);
+    while(T>T_min){
+        Point next;
+        for(int i=0;i<2;i++){
+            next.x=now.x+d[i]*T;
+            next.d=getdis(next);
+            if(next.d<now.d)now=next;
+        }
+        T*=r;
+        if(now.d<ans)ans=now.d;
     }
-    cout<<a[ans]<<endl;
+}
+int main(){
+    srand(1e9+7);
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>p[i].x;
+    }
+    for(int i=0;i<10;i++){
+        simulatedAnnealing();
+    }
+    cout<<ans<<endl;
     return 0;
 }
-
-/*
-
-10
-4 5 3 4 2 8 5 3 1 1
-
-*/

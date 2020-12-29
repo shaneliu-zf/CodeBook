@@ -16,7 +16,7 @@ int main(){
         int fy=find(y);
         if(fx!=fy)a[fy]=fx;
     }
-    //for(int i=1;i<=n;i++)a[i]=find(a[i]);
+    for(int i=1;i<=n;i++)a[i]=find(a[i]);
     int ans=0;
     for(int i=1;i<=n;i++){
         if(a[i]==i)ans++;

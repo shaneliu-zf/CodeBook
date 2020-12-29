@@ -4,19 +4,15 @@
 using namespace std;
 
 const int d[2]={1,-1};
-int n;
+int n,ans;
 struct Point{
     double x,d;
-}p[105];
-
-double getdis(Point P){
-    double ans=0;
-    for(int i=0;i<n;i++){
-        ans+=abs(P.x-p[i].x);
+    double getDis(){
+        double ans=0;
+        for(int i=0;i<n;i++)ans+=abs(x-p[i].x);
+        return ans;
     }
-    return ans;
-}
-double ans=1e20;
+}p[105];
 void simulatedAnnealing(){
     double T=1e4;
     double T_min=1e-3;
@@ -28,7 +24,7 @@ void simulatedAnnealing(){
         Point next;
         for(int i=0;i<2;i++){
             next.x=now.x+d[i]*T;
-            next.d=getdis(next);
+            next.d=next.getDis();
             if(next.d<now.d)now=next;
         }
         T*=r;
@@ -37,6 +33,7 @@ void simulatedAnnealing(){
 }
 int main(){
     srand(1e9+7);
+    ans=1e20;
     cin>>n;
     for(int i=0;i<n;i++){
         cin>>p[i].x;

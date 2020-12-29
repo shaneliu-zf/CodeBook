@@ -95,13 +95,12 @@ public:
 				c[i][j]=a[i][j]+b[i][j];
 			}
 		}
-		Matrix ans(c);
-		return ans;
+		return move(Matrix(c));
 	}
-	friend Matrix operator-(Matrix a,Matrix b){return a+(-1*b);}
+	friend Matrix operator-(Matrix a,Matrix b){return move(a+(-1*b));}
 	friend Matrix operator*(Matrix a,double t){
 		Matrix b(a.row(),a.column(),t);
-		return a*b;
+		return move(a*b);
 	}
 	friend Matrix operator*(double t,Matrix a){return a*t;}
 	friend Matrix operator*(Matrix a,Matrix b){
@@ -116,15 +115,13 @@ public:
 				}
 			}
 		}
-		Matrix ans(c);
-		return ans;
+		return move(Matrix(c));
 	}
 	friend Matrix operator^(Matrix a,int t){
-		if(t==-1)return inverse(a);
-		assert(t>0);
+		if(t==-1)a=inverse(a);
 		Matrix b=a;
 		while(--t)b=b*a;
-		return b;
+		return move(b);
 	}
 	friend Matrix T(Matrix a){
 		std::vector<std::vector<double>> c;
@@ -135,8 +132,7 @@ public:
 				c[i][j]=a[j][i];
 			}
 		}
-		Matrix ans(c);
-		return ans;
+		return move(Matrix(c));
 	}
 	friend Matrix inverse(Matrix a){
 		assert(a.isSqure());
@@ -151,7 +147,7 @@ public:
 		else for(int i=0;i<a.column();i++){
 			ans+=pow(-1,i)*a[0][i]*det(cof(a,0,i));
 		}
-		return ans;
+		return move(ans);
 	}
 	friend Matrix cof(Matrix a,int x,int y){
 		assert(a.isSqure());
@@ -169,8 +165,7 @@ public:
 			}
 			q++;
 		}
-		Matrix ans(c);
-		return ans;
+		return move(Matrix(c));
 	}
 	friend Matrix adj(Matrix a){
 		assert(a.isSqure());
@@ -182,7 +177,6 @@ public:
 				c[i][j]=pow(-1,i+j)*det(cof(a,i,j));
 			}
 		}
-		Matrix ans(c);
-		return T(ans);
+		return move(T(Matrix(c)));
 	}
 };

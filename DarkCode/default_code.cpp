@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 
-#define debug(x) #x<<": "<<x<<" "
+#define debug(x) "\x1b[32m"<<#x<<": "<<x<<"\x1b[0m "
 #define endl "\n"
 #define num long long
 

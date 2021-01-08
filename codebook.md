@@ -17,7 +17,7 @@ t.join();
 ```c++
 #include<bits/stdc++.h>
 
-#define debug(x) #x<<": "<<x<<" "
+#define debug(x) "\x1b[32m"<<#x<<": "<<x<<"\x1b[0m "
 #define endl "\n"
 #define num long long
 
@@ -38,7 +38,7 @@ template<typename T>inline T input(){
     for(;!isdigit(ch);ch=getchar())if(ch=='-')fl=-1;
     for(;isdigit(ch);ch=getchar())sum=sum*10+ch-'0';
     return sum*fl;
-}//int a=input<int>();
+}//int a=input<int>(); just int,ll can use
 ```
 ## Python
 ### slice
@@ -408,13 +408,12 @@ public:
 				c[i][j]=a[i][j]+b[i][j];
 			}
 		}
-		Matrix ans(c);
-		return ans;
+		return move(Matrix(c));
 	}
-	friend Matrix operator-(Matrix a,Matrix b){return a+(-1*b);}
+	friend Matrix operator-(Matrix a,Matrix b){return move(a+(-1*b));}
 	friend Matrix operator*(Matrix a,double t){
 		Matrix b(a.row(),a.column(),t);
-		return a*b;
+		return move(a*b);
 	}
 	friend Matrix operator*(double t,Matrix a){return a*t;}
 	friend Matrix operator*(Matrix a,Matrix b){
@@ -429,15 +428,13 @@ public:
 				}
 			}
 		}
-		Matrix ans(c);
-		return ans;
+		return move(Matrix(c));
 	}
 	friend Matrix operator^(Matrix a,int t){
-		if(t==-1)return inverse(a);
-		assert(t>0);
+		if(t==-1)a=inverse(a);
 		Matrix b=a;
 		while(--t)b=b*a;
-		return b;
+		return move(b);
 	}
 	friend Matrix T(Matrix a){
 		std::vector<std::vector<double>> c;
@@ -448,8 +445,7 @@ public:
 				c[i][j]=a[j][i];
 			}
 		}
-		Matrix ans(c);
-		return ans;
+		return move(Matrix(c));
 	}
 	friend Matrix inverse(Matrix a){
 		assert(a.isSqure());
@@ -464,7 +460,7 @@ public:
 		else for(int i=0;i<a.column();i++){
 			ans+=pow(-1,i)*a[0][i]*det(cof(a,0,i));
 		}
-		return ans;
+		return move(ans);
 	}
 	friend Matrix cof(Matrix a,int x,int y){
 		assert(a.isSqure());
@@ -482,8 +478,7 @@ public:
 			}
 			q++;
 		}
-		Matrix ans(c);
-		return ans;
+		return move(Matrix(c));
 	}
 	friend Matrix adj(Matrix a){
 		assert(a.isSqure());
@@ -495,8 +490,7 @@ public:
 				c[i][j]=pow(-1,i+j)*det(cof(a,i,j));
 			}
 		}
-		Matrix ans(c);
-		return T(ans);
+		return move(T(Matrix(c)));
 	}
 };
 ```
@@ -639,6 +633,25 @@ vector<int> LIS(vector<int> s){
     return v;
 }
 ```
+### KMP
+```c++
+int KMP(string pat,string txt){
+    vector<vector<int>>dp(pat.length(),vector<int>(256,0));
+    dp[0][pat[0]]=1;
+    int x=0;
+    for(int j=1;j<pat.length();j++){
+        for(int c=0;c<256;c++)dp[j][c]=dp[x][c];
+        dp[j][pat[j]]=j+1;
+        x=dp[x][pat[j]];
+    }
+    int j=0;
+    for(int i=0;i<txt.length();i++){
+        j=dp[j][txt[i]];
+        if(j==pat.length())return i-pat.length()+1;
+    }
+    return -1;
+}
+```
 ### union find
 ```c++
 #include<iostream>
@@ -659,7 +672,7 @@ int main(){
         int fy=find(y);
         if(fx!=fy)a[fy]=fx;
     }
-    //for(int i=1;i<=n;i++)a[i]=find(a[i]);
+    for(int i=1;i<=n;i++)a[i]=find(a[i]);
     int ans=0;
     for(int i=1;i<=n;i++){
         if(a[i]==i)ans++;
@@ -699,6 +712,55 @@ int main(){
 	return 0;
 }
 ```
+### simulated annealing
+```c++
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+using namespace std;
+
+const int d[2]={1,-1};
+int n,ans;
+struct Point{
+    double x,d;
+    double getDis(){
+        double ans=0;
+        for(int i=0;i<n;i++)ans+=abs(x-p[i].x);
+        return ans;
+    }
+}p[105];
+void simulatedAnnealing(){
+    double T=1e4;
+    double T_min=1e-3;
+    double r=0.83;
+    Point now;
+    now.x=rand()%10001;
+    now.d=getdis(now);
+    while(T>T_min){
+        Point next;
+        for(int i=0;i<2;i++){
+            next.x=now.x+d[i]*T;
+            next.d=next.getDis();
+            if(next.d<now.d)now=next;
+        }
+        T*=r;
+        if(now.d<ans)ans=now.d;
+    }
+}
+int main(){
+    srand(1e9+7);
+    ans=1e20;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>p[i].x;
+    }
+    for(int i=0;i<10;i++){
+        simulatedAnnealing();
+    }
+    cout<<ans<<endl;
+    return 0;
+}
+```
 ## Math
 ### newton raphson method
 ```c++
@@ -714,6 +776,17 @@ bool isSquareNumber(long long n){
   	if(n<1)return false;
 	for(long long i=1;n;i+=2)n-=i;
     return !n;
+}
+```
+### inverse sqrt
+```c++
+double invSqrt(double x){
+    double xhalf=0.5f*x;
+    int i=*(int*)&x;
+    i=0x5f3759df-(i>>1);
+    x=*(double*)&i;
+    x=x*(1.5f-xhalf*x*x);
+    return x;
 }
 ```
 ### fast power
@@ -776,6 +849,13 @@ inline num pollardRho(num n){
     return max(pollardRho(p),pollardRho(n/p));
 }
 ```
+### abs
+```c++
+inline num abs(num x){
+      num y=x>>31;
+      return (x+y)^y;
+}
+```
 ### fast multi
 ```c++
 inline num fastMulti(num a,num b,num mod=0){
@@ -787,6 +867,16 @@ inline num fastMulti(num a,num b,num mod=0){
     }
     return ans;
 }
+
+/*
+
+inline num mulmod(num x,num y,num mod){
+    num ret = 0;
+    __asm__("movq %1,%%rax\n imulq %2\n idivq %3\n":"=d"(ret):"m"(x),"m"(y),"m"(mod):"%rax");
+    return ret;
+}
+
+*/
 ```
 ### gcd
 ```c++
@@ -818,6 +908,13 @@ bool millerRabin(num n,int times=20){
 	return true;
 }
 ```
+### max
+```c++
+inline num max(num x, num y){
+    num t=(x-y)>>31;
+    return y&(t)|x&~(t);
+}
+```
 ### mod inverse
 ```c++
 //need: gcdExtended
@@ -833,13 +930,13 @@ num modInverse(num a,num m){
 //need: gcdExtended
 num chineseRemainder(num a[],num w[],int len){
 	num d,x,y,m,n=1,ret=0;
-		for(int i=0;i<len;i++)n*=w[i];
-		for(int i=0;i<len;i++){
-			m=n/w[i];
-			d=gcdExtended(w[i],m,&x,&y);
-			ret=(ret+y*m*a[i])%n;
-		}
-		return (n+ret%n)%n;
+	for(int i=0;i<len;i++)n*=w[i];
+	for(int i=0;i<len;i++){
+		m=n/w[i];
+		d=gcdExtended(w[i],m,&x,&y);
+		ret=(ret+y*m*a[i])%n;
+	}
+	return (n+ret%n)%n;
 }
 ```
 ## ClassicProblem
@@ -855,6 +952,38 @@ int Knapsack(int weight[],int value[],int n,int m){
         }
     }
     return dp[m];
+}
+```
+### count one in bits
+```c++
+num countOneInBits(num n){
+    num count=0;
+    while(n){
+        ++count;
+        n&=n-1;
+    }
+    return count;
+}
+```
+### fibonacci
+```c++
+int fibonacci(int n){
+    union{
+        double d;
+        long long lld;
+    }log2={0x23C6EF372FE951P-52*n};
+    int result=((log2.lld>>52)-0x3FF)/0xB1B9D68A8E5338P-56;
+    double power=0x727C9716FFB764P-56;
+    int i=(result+3)/4;
+    switch(result%4){
+        case 0:do{ power*=0x19E3779B97F4A8P-52;
+        case 3:    power*=0x19E3779B97F4A8P-52;
+        case 2:    power*=0x19E3779B97F4A8P-52;
+        case 1:    power*=0x19E3779B97F4A8P-52;
+        }while(--i>0);
+    }
+    int ans=power+0x1P-1<n?power*0x19E3779B97F4A8P-52+0x1P-1<n?result+2:result+1:result;
+    return ans;
 }
 ```
 ### mah jang

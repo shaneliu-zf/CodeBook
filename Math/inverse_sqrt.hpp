@@ -1,4 +1,4 @@
-double invSqrt(float x){
+double invSqrt(double x){
     double xhalf=0.5f*x;
     int i=*(int*)&x;
     i=0x5f3759df-(i>>1);

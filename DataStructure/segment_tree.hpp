@@ -7,9 +7,6 @@ public:
     Node<T> *r_son;
     T data;
     void setRange(int l,int r){l_segment=l,r_segment=r;}
-    int getMid(){
-        return (l_segment+r_segment)/2;
-    }
 };
 
 template<class T>class SegmentTree{

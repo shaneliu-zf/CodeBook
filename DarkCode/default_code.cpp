@@ -1,14 +1,44 @@
-#include<bits/stdc++.h>
-
-#define debug(x) "\x1b[32m"<<#x<<": "<<x<<"\x1b[0m "
-#define endl "\n"
-#define num long long
+#include<iostream>
+#include<algorithm>
+#include<queue>
+#include<cmath>
+#include<map>
+#include<set>
+#include<string>
+#include<vector>
+#include<sstream>
 
 using namespace std;
 
-int main(){
-	cin.tie(0);
-	ios_base::sync_with_stdio(0);
+#define int long long
+#define debug(x) cerr << "\e[1;31m" << #x << " = " << (x) << "\e[0m\n"
 
-	return 0;
+template<typename T>ostream & operator<<(ostream &out,vector<T> &v){
+    for(T i:v)out<<i<< (next(&i)!=v.end())?:" ";
+    return out;
 }
+template<typename T>istream & operator>>(istream &in,vector<T> &v){
+    for(T &i:v)in>>i;
+	return in;
+}
+
+template<typename T>string toString(T x){
+    stringstream ss;
+    ss << x;
+    return ss.str();
+}
+
+void init();
+void task();
+int32_t main(){
+    init();
+    int t=1;
+    cin>>t;
+    while(t--)task();
+    return 0;
+}
+
+void init(){}
+
+
+void task(){}

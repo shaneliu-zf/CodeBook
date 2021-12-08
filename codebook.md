@@ -15,46 +15,74 @@ t.join();
 ```
 ### default code
 ```c++
-#include<bits/stdc++.h>
-
-#define debug(x) "\x1b[32m"<<#x<<": "<<x<<"\x1b[0m "
-#define endl "\n"
-#define num long long
-
+#include<iostream>
+#include<algorithm>
+#include<queue>
+#include<cmath>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
 using namespace std;
 
-int main(){
-	cin.tie(0);
-	ios_base::sync_with_stdio(0);
+#define int long long
+#define endl '\n'
+#define IO_optimization ios_base::sync_with_stdio(0),cin.tie(0)
+template<typename T>ostream & operator<<(ostream &out,vector<T>&v){
+    for(int i=0;i<v.size();i++){
+        out<<v[i]<<" \0"[i==v.size()-1];
+    }
+    return out;
+}
+template<typename T>istream & operator>>(istream &in,vector<T> &v){
+    for(T &i:v)in>>i;
+    return in;
+}
+template<typename T>string toString(T x){
+    stringstream ss;
+    ss << x;
+    return ss.str();
+}
+template<typename T>int toInt(T x){
+    stringstream ss;
+    int ans;
+    ss<<x;
+    ss>>ans;
+    return ans;
+}
+inline int nextInt(){
+	int x = 0;
+    int c = getchar();
+    bool neg = false;
+	while(('0' > c || c > '9') && c!='-' && c!=EOF) c = getchar();
+	if(c == '-') neg = true, c = getchar();
+	while('0' <= c && c <= '9') x = x*10 + (c^'0'), c = getchar();
+	if(neg) x = -x;
+	return x;
+}
+inline int mod(int a,int b){
+    return (a%b+b)%b;
+}
 
-	return 0;
+void init();
+void task();
+int32_t main(){
+    IO_optimization;
+    int t=1;
+    //cin>>t;
+    while(t--)task();
+    return 0;
+}
+
+void init(){}
+
+
+void task(){
+    
 }
 ```
-### faster input
-```c++
-template<typename T>inline T input(){
-    T sum=0,fl=1;
-    int ch=getchar();
-    for(;!isdigit(ch);ch=getchar())if(ch=='-')fl=-1;
-    for(;isdigit(ch);ch=getchar())sum=sum*10+ch-'0';
-    return sum*fl;
-}//int a=input<int>(); just int,ll can use
-```
-## Python
-### slice
-```python
-a[begin:end:step]
-```
-### swap
-```python
-a,b=(b,a)
-```
-### input
-```python
-a,b=input().split(" ")
-```
 ## OOP
-### Function
+### function
 ```c++
 #include<vector>
 class func:std::vector<double>{
@@ -408,12 +436,12 @@ public:
 				c[i][j]=a[i][j]+b[i][j];
 			}
 		}
-		return move(Matrix(c));
+		return std::move(Matrix(c));
 	}
 	friend Matrix operator-(Matrix a,Matrix b){return move(a+(-1*b));}
 	friend Matrix operator*(Matrix a,double t){
 		Matrix b(a.row(),a.column(),t);
-		return move(a*b);
+		return std::move(a*b);
 	}
 	friend Matrix operator*(double t,Matrix a){return a*t;}
 	friend Matrix operator*(Matrix a,Matrix b){
@@ -428,13 +456,14 @@ public:
 				}
 			}
 		}
-		return move(Matrix(c));
+		return std::move(Matrix(c));
 	}
 	friend Matrix operator^(Matrix a,int t){
-		if(t==-1)a=inverse(a);
+        if(t==0)return a;
+		if(t<0)a=inverse(a^(t*-1));
 		Matrix b=a;
 		while(--t)b=b*a;
-		return move(b);
+		return std::move(b);
 	}
 	friend Matrix T(Matrix a){
 		std::vector<std::vector<double>> c;
@@ -445,7 +474,7 @@ public:
 				c[i][j]=a[j][i];
 			}
 		}
-		return move(Matrix(c));
+		return std::move(Matrix(c));
 	}
 	friend Matrix inverse(Matrix a){
 		assert(a.isSqure());
@@ -460,7 +489,7 @@ public:
 		else for(int i=0;i<a.column();i++){
 			ans+=pow(-1,i)*a[0][i]*det(cof(a,0,i));
 		}
-		return move(ans);
+		return std::move(ans);
 	}
 	friend Matrix cof(Matrix a,int x,int y){
 		assert(a.isSqure());
@@ -478,7 +507,7 @@ public:
 			}
 			q++;
 		}
-		return move(Matrix(c));
+		return std::move(Matrix(c));
 	}
 	friend Matrix adj(Matrix a){
 		assert(a.isSqure());
@@ -490,11 +519,11 @@ public:
 				c[i][j]=pow(-1,i+j)*det(cof(a,i,j));
 			}
 		}
-		return move(T(Matrix(c)));
+		return std::move(T(Matrix(c)));
 	}
 };
 ```
-### Fraction
+### fraction
 ```c++
 #include<algorithm>
 class Frac:std::pair<int,int>{
@@ -536,7 +565,7 @@ public:
     friend Frac inverse(Frac a){return Frac(a.second,a.first);}
 };
 ```
-## Java
+## JAVA
 ### BigInteger
 ```java
 import java.math.BigInteger;
@@ -617,9 +646,9 @@ int main(){
     return 0;
 }
 ```
-### lis
+### LIS
 ```c++
-vector<int> LIS(vector<int> s){
+template<class T>vector<T> LIS(vector<T> s){
     if(s.empty())return s;
     vector<int>v;
     v.push_back(s[0]);
@@ -632,6 +661,20 @@ vector<int> LIS(vector<int> s){
     }
     return v;
 }
+
+/*template<class T>int LIS(vector<T>& v){
+    if(!v.size())return 0;
+    vector<int>len(v.size(),1);
+    for(int i=1;i<v.size();i++){
+        for(int j=0;j<i;j++){
+            if(v[j]<=v[i])
+                len[i]=max(len[i],len[j]+1);
+        }
+	}
+    int result=0;
+    for(int l:len)if(result<l)result=l;
+    return result;
+}*/
 ```
 ### KMP
 ```c++
@@ -652,7 +695,7 @@ int KMP(string pat,string txt){
     return -1;
 }
 ```
-### union find
+### Union find
 ```c++
 #include<iostream>
 using namespace std;
@@ -681,7 +724,7 @@ int main(){
     return 0;
 }
 ```
-### mst
+### MST
 ```c++
 #include<iostream>
 #include<algorithm>
@@ -712,57 +755,8 @@ int main(){
 	return 0;
 }
 ```
-### simulated annealing
-```c++
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
-using namespace std;
-
-const int d[2]={1,-1};
-int n,ans;
-struct Point{
-    double x,d;
-    double getDis(){
-        double ans=0;
-        for(int i=0;i<n;i++)ans+=abs(x-p[i].x);
-        return ans;
-    }
-}p[105];
-void simulatedAnnealing(){
-    double T=1e4;
-    double T_min=1e-3;
-    double r=0.83;
-    Point now;
-    now.x=rand()%10001;
-    now.d=getdis(now);
-    while(T>T_min){
-        Point next;
-        for(int i=0;i<2;i++){
-            next.x=now.x+d[i]*T;
-            next.d=next.getDis();
-            if(next.d<now.d)now=next;
-        }
-        T*=r;
-        if(now.d<ans)ans=now.d;
-    }
-}
-int main(){
-    srand(1e9+7);
-    ans=1e20;
-    cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>p[i].x;
-    }
-    for(int i=0;i<10;i++){
-        simulatedAnnealing();
-    }
-    cout<<ans<<endl;
-    return 0;
-}
-```
 ## Math
-### newton raphson method
+### Newton Raphson Method
 ```c++
 double Newton_Raphson_Method(func f,double x=1){
     while(abs(f.setX(x))>0.000001)
@@ -791,6 +785,20 @@ double invSqrt(double x){
 ```
 ### fast power
 ```c++
+
+inline int fastPower(int x,unsigned int y,int p){
+	int res = 1;
+	x = x % p;
+	while (y > 0){
+        if (y & 1)res = (res*x) % p;
+		y = y>>1;
+		x = (x*x) % p;
+	}
+	return res;
+}
+
+/* 好像有問題
+
 inline num fastPower(num a,num b,num mod=0){
 	num ans=1;
 	while(b){
@@ -799,7 +807,7 @@ inline num fastPower(num a,num b,num mod=0){
 		b>>=1;
 	}
 	return ans;
-}
+}*/
 ```
 ### langrange polynomial
 ```c++
@@ -884,10 +892,10 @@ inline num gcd(num a,num b){
     return a<0?gcd(-a,b):(!a?1:(!b?a:gcd(b,a%b)));
 }// lcm=a*b/gcd(a,b)
 ```
-### miller rabin
+### Miller Rabin
 ```c++
 //need: fastMulti、fastPower
-bool millerRabin(num n,int times=20){
+/*bool millerRabin(num n,int times=20){
 	if(n==2)return true;
 	if(n<2||n%2==0)return false;
 	for(int i=1;i<=times;){
@@ -905,6 +913,26 @@ bool millerRabin(num n,int times=20){
         }
         next:i++;
 	}
+	return true;
+}*/
+bool miillerRabin(int n,int k=20){
+	if(n<=1||n==4)return false;
+	if(n<=3)return true;
+	int d=n-1;
+	while(d%2==0)d/=2;
+	for(int i=0;i<k;i++)
+		if(![](int d, int n){
+        	int a=2+rand()%(n-4);
+        	int x=fastPower(a,d,n);
+        	if (x==1||x==n-1)return true;
+        	while (d!=n-1){
+        		x=(x*x)%n;
+        		d*=2;
+        		if(x==1)return false;
+        		if(x==n-1)return true;
+        	}
+        	return false;
+        }(d,n))return false;
 	return true;
 }
 ```
@@ -939,35 +967,67 @@ num chineseRemainder(num a[],num w[],int len){
 	return (n+ret%n)%n;
 }
 ```
-## ClassicProblem
-### 0-1Knapsack
+## DataStructure
+### segment tree
 ```c++
-int dp[100005];
-int Knapsack(int weight[],int value[],int n,int m){
-    for(int i=0;i<n;i++){
-	    for(int j=m;j>=0;j--){
-            if(j-weight[i]>=0){
-                dp[j]=max(dp[j],dp[j-weight[i]]+value[i]);
-            }
+template<class T>struct Node{
+private:
+public:
+    int l_segment;
+    int r_segment;
+    Node<T> *l_son;
+    Node<T> *r_son;
+    T data;
+    void set(int l,int r){l_segment=l,r_segment=r;}
+};
+
+template<class T>class SegmentTree{
+private:
+    Node<T> *root;
+    vector<T> vec;
+    function<T(T,T)>func;
+    void build(Node<T> *now,int l,int r){
+        now->set(l,r);
+        if(l==r-1)now->data=vec[l];
+        else{
+            now->l_son=new Node<T>();
+            now->r_son=new Node<T>();
+            build(now->l_son,l,(l+r)/2);
+            build(now->r_son,(l+r)/2,r);
+            now->data=func(now->l_son->data,now->r_son->data);
         }
     }
-    return dp[m];
-}
-```
-### count one in bits
-```c++
-num countOneInBits(num n){
-    num count=0;
-    while(n){
-        ++count;
-        n&=n-1;
+    T query(Node<T> *now,int l,int r){
+        if(now->l_segment==l && now->r_segment==r)return now->data;
+        else{
+            int mid=(now->l_segment+now->r_segment)/2;
+            if(r<=mid)return query(now->l_son,l,r);
+            else if(l>=mid)return query(now->r_son,l,r);
+            else return func(query(now->l_son,l,mid),query(now->r_son,mid,r));
+        }
     }
-    return count;
-}
+    void modify(Node<T> *now,int x,T value){
+        if(now->l_segment==now->r_segment-1)now->data=value;
+        else{
+            int mid=(now->l_segment+now->r_segment)/2;
+            if(x<mid)modify(now->l_son,x,value);
+            else modify(now->r_son,x,value);
+            now->data=func(now->l_son->data,now->r_son->data);
+        }
+    }
+public:
+    SegmentTree(vector<T>&_vec,function<T(T,T)>_func):vec(_vec),func(_func){
+        root = new Node<T>();
+        build(root,0,vec.size());
+    }
+    T query(int l,int r){return query(root,l,r);}
+    void modify(int x,T value){modify(root,x,value);}
+};
 ```
-### fibonacci
+## ClassicProblem
+### reFibonacci
 ```c++
-int fibonacci(int n){
+int reFibonacci(int n){
     union{
         double d;
         long long lld;
@@ -986,7 +1046,20 @@ int fibonacci(int n){
     return ans;
 }
 ```
-### mah jang
+### 0-1Knapsack
+```c++
+int knapsack(vector<int>weight,vector<int>value,int n,int m){
+    for(int i=0;i<n;i++){
+	    for(int j=m;j>=0;j--){
+            if(j-weight[i]>=0){
+                dp[j]=max(dp[j],dp[j-weight[i]]+value[i]);
+            }
+        }
+    }
+    return dp[m];
+}
+```
+### 麻將
 ```c++
 #include <iostream>
 #include <sstream>
@@ -1042,5 +1115,72 @@ int main(){
     if(win((n+1)/3))cout<<"Win!"<<endl;
     else cout<<"Nope"<<endl;
     return 0;
+}
+```
+### 工作排程
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<queue>
+using namespace std;
+
+#define endl '\n'
+#define IO_optimization cin.tie(0),ios_base::sync_with_stdio(false)
+
+void task();
+int main(){
+	IO_optimization;
+	int t=0;
+	cin>>t;
+	while(t--)task();
+	return 0;
+}
+
+struct Work{
+	int time;
+	int deadline;
+	void input(){
+		cin>>time>>deadline;
+	}
+	bool operator<(Work other)const{
+		return deadline<other.deadline;
+	}
+};
+
+vector<Work>works;
+
+void task(){
+	int n;
+	cin>>n;
+	works.resize(n);
+
+	for(int i=0;i<n;i++){
+		works[i].input();
+	}
+	sort(works.begin(),works.end());
+
+	priority_queue<int>scheule;
+	int now=0;
+	for(int i=0;i<n;i++){
+		scheule.push(works[i].time);
+		now+=works[i].time;
+		if(now>works[i].deadline){
+			now-=scheule.top();
+			scheule.pop();
+		}
+	}
+	cout<<scheule.size()<<endl;
+}
+```
+### popcount
+```c++
+num popCount(num n){
+    num count=0;
+    while(n){
+        ++count;
+        n&=n-1;
+    }
+    return count;
 }
 ```

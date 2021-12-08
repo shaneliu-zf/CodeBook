@@ -1,4 +1,4 @@
-num countOneInBits(num n){
+num popCount(num n){
     num count=0;
     while(n){
         ++count;

@@ -1,1 +1,0 @@
-a[begin:end:step]

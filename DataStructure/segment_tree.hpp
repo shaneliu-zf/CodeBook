@@ -6,7 +6,7 @@ public:
     Node<T> *l_son;
     Node<T> *r_son;
     T data;
-    void setRange(int l,int r){l_segment=l,r_segment=r;}
+    void set(int l,int r){l_segment=l,r_segment=r;}
 };
 
 template<class T>class SegmentTree{
@@ -15,7 +15,7 @@ private:
     vector<T> vec;
     function<T(T,T)>func;
     void build(Node<T> *now,int l,int r){
-        now->setRange(l,r);
+        now->set(l,r);
         if(l==r-1)now->data=vec[l];
         else{
             now->l_son=new Node<T>();
